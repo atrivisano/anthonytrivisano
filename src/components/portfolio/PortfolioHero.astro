@@ -1,0 +1,25 @@
+---
+import Container from '../common/Container.astro';
+import ArrowDown from 'astro-heroicons/outline/ArrowDown.astro';
+---
+
+<section class="relative isolate overflow-hidden bg-gradient-to-b from-neutral-900 dark:to-neutral-950">
+    <Container class="py-24 sm:py-32">
+        <div class="mx-auto max-w-2xl text-center">
+            <h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+                Featured Projects
+            </h1>
+            <p class="mt-6 text-lg leading-8 text-neutral-50">
+                A showcase of my professional work, side projects, and contributions to the development community.
+            </p>
+            <div class="mt-10 flex items-center justify-center gap-x-6">
+                <a
+                    href="#projects"
+                    class="flex gap-1.5 items-center text-sm font-semibold leading-6 text-white"
+                >
+                    View All Projects <ArrowDown class="ml-2 w-5 h-5" aria-hidden="true" />
+                </a>
+            </div>
+        </div>
+    </Container>
+</section>

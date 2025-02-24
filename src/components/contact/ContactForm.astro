@@ -1,0 +1,118 @@
+---
+import PrimaryButton from './PrimaryButton.astro';
+---
+
+<form id="contact-form" class="space-y-6" method="POST" action="/api/contact">
+    <div>
+        <label for="name" class="block text-sm font-medium text-white">
+            Name
+        </label>
+        <input
+            type="text"
+            name="name"
+            id="name"
+            required
+            class="input"
+            placeholder="Your name"
+        />
+    </div>
+
+    <div>
+        <label for="email" class="block text-sm font-medium text-white">
+            Email
+        </label>
+        <input
+            type="email"
+            name="email"
+            id="email"
+            required
+            class="input"
+            placeholder="your.email@example.com"
+        />
+    </div>
+
+    <div>
+        <label for="subject" class="block text-sm font-medium text-white">
+            Subject
+        </label>
+        <input
+            type="text"
+            name="subject"
+            id="subject"
+            required
+            class="input"
+            placeholder="What's this about?"
+        />
+    </div>
+
+    <div>
+        <label for="message" class="block text-sm font-medium text-white">
+            Message
+        </label>
+        <textarea
+            name="message"
+            id="message"
+            rows="4"
+            required
+            class="input"
+            placeholder="Your message..."
+        ></textarea>
+    </div>
+
+    <button
+        type="submit"
+        class="cursor-pointer inline-flex items-center justify-center rounded-3xl bg-black px-5 py-3 text-base font-semibold text-neutral-950 transition-all duration-200 bg-white hover:bg-neutral-200 w-full"
+    >
+        Send Message
+    </button>
+
+    <div id="form-status" class="hidden text-center py-4"></div>
+</form>
+
+<script>
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    const statusDiv = document.getElementById('form-status') as HTMLDivElement;
+
+    if (form && statusDiv) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Show loading state
+            statusDiv.classList.remove('hidden');
+            statusDiv.classList.remove('text-green-500', 'text-red-500');
+            statusDiv.classList.add('text-black', 'dark:text-white');
+            statusDiv.innerHTML = 'Sending message...';
+
+            const formData = new FormData(form);
+            const formObject = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formObject),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Success state
+                    statusDiv.classList.remove('text-black', 'dark:text-white', 'text-red-500');
+                    statusDiv.classList.add('text-green-500');
+                    statusDiv.innerHTML = 'Message sent successfully!';
+                    form.reset();
+                } else {
+                    // Error state
+                    throw new Error(data.message || 'Something went wrong');
+                }
+            } catch (error) {
+                // Error state
+                statusDiv.classList.remove('text-black', 'dark:text-white', 'text-green-500');
+                statusDiv.classList.add('text-red-500');
+                statusDiv.innerHTML = error instanceof Error ? error.message : 'Failed to send message. Please try again.';
+            }
+        });
+    }
+</script>

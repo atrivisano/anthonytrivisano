@@ -1,0 +1,18 @@
+---
+import SocialLinks from './SocialLinks.astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-neutral-950">
+	<div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+		<div class="flex flex-col items-center justify-between space-y-6 md:flex-row md:space-y-0">
+			<div class="flex space-x-6">
+				<SocialLinks />
+			</div>
+			<p class="text-sm text-white">
+				© {currentYear} Your Name. All rights reserved.
+			</p>
+		</div>
+	</div>
+</footer>

@@ -1,0 +1,49 @@
+---
+import CategoryBadge from './CategoryBadge.astro';
+interface Props {
+    categories: string[];
+    selectedCategory?: string;
+}
+
+const { categories, selectedCategory = 'All' } = Astro.props;
+---
+
+<div class="flex flex-wrap gap-3" data-filter-bar>
+    <CategoryBadge
+        category="All"
+        isSelected={selectedCategory === 'All'}
+        onClick="filterProjects('All')"
+    />
+    {categories.map((category) => (
+        <CategoryBadge
+            category={category}
+            isSelected={selectedCategory === category}
+            onClick={`filterProjects('${category}')`}
+        />
+    ))}
+</div>
+
+<script>
+    function filterProjects(category: string) {
+        const projects = document.querySelectorAll('[data-category]');
+        const filterButtons = document.querySelectorAll('[data-filter-bar] button');
+
+        // Update active button state
+        filterButtons.forEach(button => {
+            button.classList.toggle('bg-neutral-100', button.dataset.category === category);
+            button.classList.toggle('text-neutral-200', button.dataset.category === category);
+        });
+
+        // Filter projects
+        projects.forEach(project => {
+            if (category === 'All' || project.getAttribute('data-category') === category) {
+                project.classList.remove('hidden');
+            } else {
+                project.classList.add('hidden');
+            }
+        });
+    }
+
+    // Attach the function to the window object to make it accessible from HTML
+    window.filterProjects = filterProjects;
+</script>

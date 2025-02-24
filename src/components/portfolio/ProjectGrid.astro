@@ -1,0 +1,55 @@
+---
+import Container from '../common/Container.astro';
+import FilterBar from './FilterBar.astro';
+import ProjectCard from './ProjectCard.astro';
+
+const projects = [
+    {
+        title: 'Class Actions Intake System',
+        description: 'A secure web application for managing class action client data. Features include dynamic form generation, data manipulation, and API integration with closed networks.',
+        image: '/api/placeholder/600/400',
+        tags: ['Laravel', 'WordPress', 'API Development', 'UML'],
+        category: 'Web Applications',
+        link: '#',
+    },
+    {
+        title: 'Overtime Management System',
+        description: 'An enterprise overtime request system integrated with Azure AD and Ceridian Dayforce. Streamlines the overtime submission and approval process through REST API integration.',
+        image: '/api/placeholder/600/400',
+        tags: ['Laravel', 'Azure AD', 'REST API', 'SFTP'],
+        category: 'Enterprise Solutions',
+        link: '#',
+    },
+    {
+        title: 'Workflow Optimization Initiative',
+        description: 'Comprehensive business process reformation that reduced development lifecycle from 14 weeks to 5 weeks while improving team satisfaction and innovation capacity.',
+        image: '/api/placeholder/600/400',
+        tags: ['Process Design', 'Team Leadership', 'Workflow Optimization'],
+        category: 'Process Improvement',
+        link: '#',
+    },
+    {
+        title: 'Organization Structure Standardization',
+        description: 'Led the unification of organizational structure across all business applications, improving data consistency and operational efficiency.',
+        image: '/api/placeholder/600/400',
+        tags: ['System Integration', 'Process Management', 'Data Standardization'],
+        category: 'Enterprise Solutions',
+        link: '#',
+    }
+];
+
+const categories = [...new Set(projects.map(project => project.category))];
+---
+
+<section id="projects" class="py-24 sm:py-32">
+    <Container>
+        <div class="space-y-12">
+            <FilterBar categories={categories} />
+            <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
+                {projects.map((project) => (
+                    <ProjectCard {...project} />
+                ))}
+            </div>
+        </div>
+    </Container>
+</section>

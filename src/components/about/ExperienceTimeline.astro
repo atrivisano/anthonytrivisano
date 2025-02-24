@@ -1,0 +1,46 @@
+---
+import Container from '../common/Container.astro';
+import SectionHeader from './SectionHeader.astro';
+import ExperienceCard from './ExperienceCard.astro';
+import CodeBracket from 'astro-heroicons/outline/CodeBracket.astro'
+
+const experiences = [
+    {
+        title: 'Vice President of Development',
+        company: 'Redding Designs Inc.',
+        period: '2023 - Present',
+        description: 'Leading organizational transformation through strategic development initiatives and process optimization. Implemented new workflows that reduced development lifecycle from 14 weeks to 5 weeks while improving team satisfaction and innovation.',
+        achievements: [
+            { text: 'Reduced development lifecycle by 64%' },
+            { text: 'Improved team satisfaction scores' }
+        ],
+        icon: `<svg class="h-8 w-8 text-neutral-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+    </svg>`
+    },
+    {
+        title: 'Senior Programmer Analyst',
+        company: 'Siskinds LLP',
+        period: '2018 - 2023',
+        description: 'Managed multiple concurrent IT projects, developed critical web applications, and led organizational structure standardization initiatives.',
+        achievements: [
+            { text: 'Developed Class Actions Intake System' },
+            { text: 'Created Overtime Management System' }
+        ],
+        icon: `<svg class="h-8 w-8 text-neutral-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+    </svg>`
+    }
+];
+---
+
+<section class="mt-24 sm:mt-32">
+    <Container class="flex flex-col gap-10">
+        <SectionHeader title="Professional Journey" />
+        <div class="space-y-8">
+            {experiences.map((experience) => (
+                <ExperienceCard {...experience} />
+            ))}
+        </div>
+    </Container>
+</section>

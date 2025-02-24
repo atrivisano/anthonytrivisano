@@ -1,0 +1,22 @@
+---
+interface Props {
+    category: string;
+    isSelected?: boolean;
+    onClick?: string;
+}
+
+const { category, isSelected = false, onClick } = Astro.props;
+---
+
+<button
+    class:list={[
+        "inline-flex items-center rounded-full px-4 py-1.5 text-sm font-medium transition-colors cursor-pointer",
+        isSelected
+            ? "bg-neutral-900 text-neutral-50"
+            : "bg-neutral-800 text-neutral-50 hover:bg-neutral-900"
+    ]}
+    data-category={category}
+    onclick={onClick}
+>
+    {category}
+</button>

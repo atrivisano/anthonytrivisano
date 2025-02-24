@@ -1,0 +1,39 @@
+---
+// src/pages/contact.astro
+import MainLayout from '../layouts/MainLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ContactForm from "../components/contact/ContactForm.astro";
+---
+
+<MainLayout title="Contact - Your Name">
+    <Header slot="header"/>
+
+    <main class="container-custom section">
+        <div class="grid gap-12 lg:grid-cols-2">
+            <!-- Contact Information -->
+            <div>
+                <h1 class="heading-1">Get in Touch</h1>
+                <p class="mt-6 text-lg text-neutral-50">
+                    I'm always open to new opportunities and collaborations. Feel free to reach out!
+                </p>
+
+                <dl class="mt-12 space-y-8">
+                    <div>
+                        <dt class="text-lg font-semibold">Location</dt>
+                        <dd class="mt-2 text-gray-600 dark:text-gray-300">
+                            London, Ontario, Canada
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="p-6 transition-all duration-200 border rounded-3xl bg-neutral-900 border-neutral-800">
+                <ContactForm />
+            </div>
+        </div>
+    </main>
+
+    <Footer slot="footer"/>
+</MainLayout>

@@ -1,0 +1,127 @@
+/*
+  The CSS in this style tag is based off of Bear Blog's default CSS.
+  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
+  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
+ */
+
+@import "tailwindcss";
+
+@theme {
+    --font-sans: 'Inter var', 'sans-serif';
+    --font-display: 'Montserrat', 'sans-serif';
+
+    --bg-hero-pattern: url('/api/placeholder/1920/1080');
+
+    --inset-shadow-lg: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+}
+
+@layer base {
+    /* Smooth scrolling behavior */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Better default text selection colors */
+    ::selection {
+        @apply bg-neutral-200 text-neutral-900;
+    }
+
+    body {
+        @apply bg-black text-white;
+    }
+
+    /* Improved focus styles */
+    :focus-visible {
+        @apply outline-2 outline-neutral-500 outline-offset-2;
+    }
+}
+
+@layer components {
+    /* Container styles */
+    .container-custom {
+        @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+    }
+
+    /* Button styles */
+    .btn {
+        @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors
+        focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center rounded-none bg-white px-5 py-3 text-base font-semibold text-black transition-all duration-200
+        hover:bg-neutral-300;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center rounded-none border border-black bg-transparent px-5 py-3 text-base font-semibold text-black transition-all duration-200
+        hover:bg-neutral-300
+        dark:border-white dark:text-white dark:hover:bg-neutral-950;
+    }
+
+    /* Section styles */
+    .section {
+        @apply py-16 sm:py-24;
+    }
+
+    /* Card styles */
+    .card {
+        @apply p-6 transition-all duration-200 border rounded-3xl bg-neutral-900 border-neutral-800;
+    }
+
+    /* Link styles */
+    .link {
+        @apply text-neutral-400 hover:text-neutral-300;
+    }
+
+    /* Input styles */
+    .input {
+        @apply block w-full sm:text-sm py-2.5 px-5 mt-2.5 rounded-3xl
+        focus:border-neutral-900 focus:ring-neutral-900
+        border-neutral-900 bg-neutral-950 text-white ;
+    }
+}
+
+@layer utilities {
+    /* Typography utilities */
+    .heading-1 {
+        @apply text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl;
+    }
+
+    .heading-2 {
+        @apply text-3xl font-bold tracking-tight sm:text-4xl;
+    }
+
+    .heading-3 {
+        @apply text-2xl font-bold tracking-tight sm:text-3xl;
+    }
+
+    /* Grid utilities */
+    .grid-auto-fit {
+        @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3;
+    }
+
+    /* Animation utilities */
+    .animate-fade-in {
+        @apply animate-[fade-in_0.5s_ease-in-out];
+    }
+
+    .animate-slide-up {
+        @apply animate-[slide-up_0.5s_ease-in-out];
+    }
+
+    .text-gradient {
+        @apply bg-gradient-to-r from-neutral-600 to-neutral-500 bg-clip-text text-transparent
+        dark:from-white dark:to-neutral-200;
+    }
+}
+
+/* Custom animations */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
