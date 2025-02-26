@@ -1,0 +1,23 @@
+---
+import Container from '../common/Container.astro';
+import PrimaryButton from "../PrimaryButton.astro";
+import SecondaryButton from "../SecondaryButton.astro";
+---
+<section class="py-16 sm:py-24">
+    <Container>
+        <div class="mx-auto max-w-2xl text-center">
+            <h2 class="text-3xl font-bold tracking-tight text-white">Interested in working together?</h2>
+            <p class="mt-6 text-lg text-neutral-400">
+                Let's discuss how I can help transform your development process and deliver exceptional results for your organization.
+            </p>
+            <div class="mt-10 flex justify-center gap-x-6">
+                <PrimaryButton href="/contact">
+                    Discuss Your Project
+                </PrimaryButton>
+                <SecondaryButton href="/portfolio">
+                    View More Projects
+                </SecondaryButton>
+            </div>
+        </div>
+    </Container>
+</section>

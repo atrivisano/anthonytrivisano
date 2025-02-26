@@ -1,0 +1,107 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+import CaseStudyHero from '../../components/portfolio/CaseStudyHero.astro';
+import CaseStudyOverview from '../../components/portfolio/CaseStudyOverview.astro';
+import CaseStudyChallenge from '../../components/portfolio/CaseStudyChallenge.astro';
+import CaseStudySolution from '../../components/portfolio/CaseStudySolution.astro';
+import CaseStudyProcess from '../../components/portfolio/CaseStudyProcess.astro';
+import CaseStudyResults from '../../components/portfolio/CaseStudyResults.astro';
+import CaseStudyTechnical from '../../components/portfolio/CaseStudyTechnical.astro';
+import CaseStudyCTA from '../../components/portfolio/CaseStudyCTA.astro';
+
+// Generate a path for each portfolio item
+export async function getStaticPaths() {
+    const portfolioEntries = await getCollection('portfolio');
+    return portfolioEntries.map(entry => ({
+        params: { slug: entry.slug },
+        props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const {
+    title,
+    description,
+    keywords,
+    client,
+    timeline,
+    role,
+    technologies,
+    summary,
+    metrics,
+    challenges,
+    solution,
+    process,
+    technical
+} = entry.data;
+---
+
+<MainLayout
+    title={`${title} | Case Study | Anthony Trivisano`}
+    description={description}
+    keywords={keywords}
+>
+    <div class="bg-neutral-950">
+        <Header slot="header" />
+
+        <main>
+            <!-- Hero Section -->
+            <CaseStudyHero
+                title={title}
+                description={description}
+            />
+
+            <!-- Project Overview -->
+            <CaseStudyOverview
+                client={client}
+                timeline={timeline}
+                role={role}
+                technologies={technologies}
+                summary={summary}
+            />
+
+            <!-- The Challenge -->
+            <CaseStudyChallenge challenges={challenges}>
+                <p slot="introduction">
+                    {entry.data.challengeIntroduction || "The client faced several challenges that needed to be addressed."}
+                </p>
+            </CaseStudyChallenge>
+
+            <!-- The Solution -->
+            <CaseStudySolution
+                introduction={entry.data.solutionIntroduction}
+                components={solution}
+            >
+                <p class="text-lg text-neutral-400 mb-8">
+                    I developed a comprehensive solution to address all the key challenges.
+                </p>
+            </CaseStudySolution>
+
+            <!-- Development Process -->
+            <CaseStudyProcess phases={process} />
+
+            <!-- Results & Impact -->
+            <CaseStudyResults metrics={metrics}>
+                <p class="mb-4">The project delivered significant benefits for the client:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Improved efficiency and reduced processing time</li>
+                    <li>Enhanced data security and compliance</li>
+                    <li>Better user experience for staff and clients</li>
+                    <li>Scalable solution for future growth</li>
+                </ul>
+            </CaseStudyResults>
+
+            <!-- Technical Highlights -->
+            <CaseStudyTechnical highlights={technical} />
+
+            <!-- CTA Section -->
+            <CaseStudyCTA />
+        </main>
+
+        <Footer slot="footer" />
+    </div>
+</MainLayout>

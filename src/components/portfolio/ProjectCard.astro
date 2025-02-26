@@ -4,13 +4,12 @@ import ProjectTags from './ProjectTags.astro';
 interface Props {
     title: string;
     description: string;
-    image: string;
     tags: string[];
     category: string;
     link: string;
 }
 
-const { title, description, image, tags, category, link } = Astro.props;
+const { title, description, tags, category, link } = Astro.props;
 ---
 
 <article data-category={category} class="group relative flex flex-col overflow-hidden rounded-2xl bg-neutral-900 shadow-md hover:shadow-xl transition-all duration-300 ring-1 ring-neutral-800">

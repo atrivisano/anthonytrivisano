@@ -3,9 +3,10 @@ import '../styles/global.css';
 interface Props {
     title: string;
     description?: string;
+    keywords?: string;
 }
 
-const {title, description = "Anthony Trivisano - VP of Development & Project Management"} = Astro.props;
+const {title, description = "Anthony Trivisano - VP of Development & Project Management", keywords} = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -20,7 +21,7 @@ const {title, description = "Anthony Trivisano - VP of Development & Project Man
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css"/>
 </head>
 <body>
-<div class="flex min-h-screen flex-col justify-between">
+<div class="bg-neutral-950 flex min-h-screen flex-col justify-between">
     <slot name="header"/>
 
     <slot/>

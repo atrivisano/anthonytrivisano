@@ -2,54 +2,40 @@
 import Container from '../common/Container.astro';
 import FilterBar from './FilterBar.astro';
 import ProjectCard from './ProjectCard.astro';
+import {getCollection} from 'astro:content';
 
-const projects = [
-    {
-        title: 'Class Actions Intake System',
-        description: 'A secure web application for managing class action client data. Features include dynamic form generation, data manipulation, and API integration with closed networks.',
-        image: '/api/placeholder/600/400',
-        tags: ['Laravel', 'WordPress', 'API Development', 'UML'],
-        category: 'Web Applications',
-        link: '#',
-    },
-    {
-        title: 'Overtime Management System',
-        description: 'An enterprise overtime request system integrated with Azure AD and Ceridian Dayforce. Streamlines the overtime submission and approval process through REST API integration.',
-        image: '/api/placeholder/600/400',
-        tags: ['Laravel', 'Azure AD', 'REST API', 'SFTP'],
-        category: 'Enterprise Solutions',
-        link: '#',
-    },
-    {
-        title: 'Workflow Optimization Initiative',
-        description: 'Comprehensive business process reformation that reduced development lifecycle from 14 weeks to 5 weeks while improving team satisfaction and innovation capacity.',
-        image: '/api/placeholder/600/400',
-        tags: ['Process Design', 'Team Leadership', 'Workflow Optimization'],
-        category: 'Process Improvement',
-        link: '#',
-    },
-    {
-        title: 'Organization Structure Standardization',
-        description: 'Led the unification of organizational structure across all business applications, improving data consistency and operational efficiency.',
-        image: '/api/placeholder/600/400',
-        tags: ['System Integration', 'Process Management', 'Data Standardization'],
-        category: 'Enterprise Solutions',
-        link: '#',
-    }
-];
+// Get all portfolio entries
+const portfolioEntries = await getCollection('portfolio', ({data}) => {
+    // Filter out draft entries in production
+    return import.meta.env.PROD ? !data.draft : true;
+});
 
-const categories = [...new Set(projects.map(project => project.category))];
+// Create a list of all unique categories from the projects
+const categories = [...new Set(portfolioEntries.map(entry => entry.data.category || 'Uncategorized'))];
+
+// Convert content collection entries to project format
+const projects = portfolioEntries.map(entry => ({
+    title: entry.data.title,
+    description: entry.data.description,
+    tags: entry.data.technologies,
+    category: entry.data.category || 'Uncategorized',
+    link: `/portfolio/${entry.slug}`
+}));
 ---
 
 <section id="projects" class="py-24 sm:py-32">
     <Container>
-        <div class="space-y-12">
-            <FilterBar categories={categories} />
-            <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
-                {projects.map((project) => (
-                    <ProjectCard {...project} />
-                ))}
-            </div>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            <FilterBar categories={categories}/>
+        </div>
+
+        <div
+            data-projects-container
+            class="mt-8 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+        >
+            {projects.map((project) => (
+                <ProjectCard {...project}/>
+            ))}
         </div>
     </Container>
 </section>
