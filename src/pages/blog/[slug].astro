@@ -1,0 +1,70 @@
+---
+import Header from "../../components/Header.astro";
+export const prerender = true;
+
+import {getCollection, render} from 'astro:content';
+import BlogPostHeader from '../../components/post/BlogPostHeader.astro';
+import BlogPostContent from '../../components/post/BlogPostContent.astro';
+import PostTags from '../../components/post/PostTags.astro';
+import RelatedPosts from '../../components/post/RelatedPosts.astro';
+import CtaSection from '../../components/post/CtaSection.astro';
+import MainLayout from "../../layouts/MainLayout.astro";
+import Footer from "../../components/Footer.astro";
+
+export async function getStaticPaths() {
+    const posts = await getCollection('blog');
+    return posts.map(post => ({
+        params: {slug: post.data.slug},
+        props: {post},
+    }));
+}
+
+const {post} = Astro.props;
+const {Content} = await render(post);
+
+// For related posts, find posts with matching categories
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+    .filter(p =>
+        p.data.slug !== post.data.slug &&
+        p.data.categories.some(cat => post.data.categories.includes(cat))
+    )
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .slice(0, 3);
+---
+
+<MainLayout title={post.data.title}
+            description={post.data.description}>
+    <div class="bg-neutral-950">
+        <Header slot="header"/>
+
+        <main class="container mx-auto px-4 py-12">
+            <article class="max-w-4xl mx-auto">
+                <!-- Header Section -->
+                <BlogPostHeader
+                    title={post.data.title}
+                    date={post.data.date}
+                    author={post.data.author}
+                    categories={post.data.categories}
+                    image={post.data.image}
+                />
+
+                <!-- Content Section -->
+                <BlogPostContent>
+                    <Content/>
+                </BlogPostContent>
+
+                <!-- Tags Section -->
+                <PostTags tags={post.data.tags}/>
+            </article>
+
+            <!-- Related Posts Section -->
+            <RelatedPosts posts={relatedPosts}/>
+
+            <!-- Call to Action Section -->
+            <CtaSection/>
+        </main>
+
+        <Footer slot="footer"/>
+    </div>
+</MainLayout>

@@ -1,0 +1,36 @@
+---
+export interface Props {
+    categories: string[];
+    title?: string;
+    description?: string;
+}
+
+const {
+    categories,
+    title = "Explore Topics",
+    description = "Discover content by category or browse all topics to find exactly what you're looking for."
+} = Astro.props;
+---
+
+<section class="mb-20">
+    <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold mb-2 text-neutral-800 dark:text-neutral-100">{title}</h2>
+        <div class="w-20 h-1 bg-neutral-400 mx-auto mb-4 rounded-full"></div>
+        <p class="text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+            {description}
+        </p>
+    </div>
+
+    <div class="bg-neutral-50 dark:bg-neutral-900 rounded-2xl p-10 shadow-inner">
+        <div class="flex flex-wrap justify-center gap-4">
+            {categories.map(category => (
+                <a
+                    href={`/blog/category/${category.toLowerCase().replace(/\s+/g, '-')}`}
+                    class="px-6 py-3 bg-white dark:bg-neutral-800 hover:bg-neutral-50 hover:text-neutral-900 dark:hover:bg-neutral-700 dark:hover:text-neutral-100 text-neutral-700 dark:text-neutral-300 rounded-lg transition-all shadow-sm hover:shadow-md text-center transform hover:-translate-y-1 font-medium"
+                >
+                    {category}
+                </a>
+            ))}
+        </div>
+    </div>
+</section>

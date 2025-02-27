@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostCard from './PostCard.astro';
+import PageHeader from '../PageHeader.astro';
+
+export interface Props {
+    posts: CollectionEntry<'blog'>[];
+    title?: string;
+    description?: string;
+    startIndex?: number;
+}
+
+const {
+    posts,
+    title = "All Articles",
+    description = "Explore all my articles covering a wide range of topics in development, leadership, security, and digital transformation.",
+    startIndex = 0
+} = Astro.props;
+---
+
+<section class="mx-auto max-w-7xl mb-20">
+    <PageHeader title={title} description={description} />
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((post, index) => (
+            index >= startIndex && <PostCard post={post} />
+        ))}
+    </div>
+</section>

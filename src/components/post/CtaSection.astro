@@ -1,0 +1,26 @@
+---
+export interface Props {
+    title?: string;
+    description?: string;
+    buttonText?: string;
+    buttonLink?: string;
+}
+
+const {
+    title = "Need Professional Assistance?",
+    description = "I can help with your development and technical leadership needs.",
+    buttonText = "Get in Touch",
+    buttonLink = "/contact"
+} = Astro.props;
+---
+
+<section class="max-w-4xl mx-auto mt-16 bg-neutral-50 dark:bg-neutral-900 rounded-lg p-8 text-center shadow-md">
+    <h2 class="text-2xl font-bold mb-4 text-neutral-800 dark:text-neutral-100">{title}</h2>
+    <p class="mb-6 text-lg text-neutral-600 dark:text-neutral-300">{description}</p>
+    <a
+        href={buttonLink}
+        class="inline-block bg-neutral-800 hover:bg-neutral-900 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-white font-medium py-3 px-8 rounded-md transition-colors shadow-sm hover:shadow-md"
+    >
+        {buttonText}
+    </a>
+</section>
