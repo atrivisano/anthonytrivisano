@@ -7,7 +7,7 @@ client: "Multiple Organizations"
 timeline: "2014-Present"
 role: "Various Technical Positions"
 technologies: ["Database Design", "SQL", "MySQL", "Data Modeling", "Query Optimization", "Indexing", "Performance Tuning"]
-category: "Database Engineering"
+category: "Development & Engineering"
 summary: "Designed and optimized database architectures that balanced data integrity, query performance, and scalability, creating efficient foundations for business-critical applications and significantly improving system responsiveness."
 featuredImage: "/images/portfolio/database-optimization.jpg"
 

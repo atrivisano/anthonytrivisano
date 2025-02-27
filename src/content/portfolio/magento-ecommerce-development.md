@@ -7,7 +7,7 @@ client: "Northern Commerce/Inspiratica Inc."
 timeline: "2014-2016"
 role: "Web Developer"
 technologies: ["Magento", "PHP", "JavaScript", "MySQL", "HTML/CSS", "E-commerce", "API Integration"]
-category: "E-commerce Development"
+category: "Development & Engineering"
 summary: "Developed and managed custom Magento e-commerce applications, providing clients with powerful online retail solutions tailored to their specific business needs and customer experiences."
 featuredImage: "/images/portfolio/magento-ecommerce.jpg"
 

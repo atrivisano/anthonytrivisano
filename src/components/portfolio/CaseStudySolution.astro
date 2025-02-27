@@ -13,27 +13,25 @@ interface Props {
 
 const { introduction, components = [] } = Astro.props;
 ---
-<section class="py-16 sm:py-24 bg-neutral-900">
+<section class="py-16 sm:py-24 bg-neutral-950">
     <Container>
-        <div class="mx-auto max-w-3xl">
-            <h2 class="text-3xl font-bold tracking-tight text-white mb-8">The Solution</h2>
+        <h2 class="text-3xl font-bold tracking-tight text-white mb-8">The Solution</h2>
 
-            {introduction && (
-                <p class="text-lg text-neutral-400 mb-8">{introduction}</p>
-            )}
+        {introduction && (
+            <p class="text-lg text-neutral-300 mb-8">{introduction}</p>
+        )}
 
-            <slot />
+        <slot />
 
-            {components && components.length > 0 && (
-                <div class="mt-10 space-y-8">
-                    {components.map((component, index) => (
-                        <div class="border-l-4 border-primary-600 pl-6">
-                            <h3 class="text-xl font-bold text-white">{component.title}</h3>
-                            <p class="mt-2 text-neutral-400">{component.description}</p>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
+        {components && components.length > 0 && (
+            <div class="mt-10 space-y-8">
+                {components.map((component, index) => (
+                    <div class="border-l-4 hover:border-l-8 border-white pl-6 transition-all">
+                        <h3 class="text-xl font-bold text-white">{component.title}</h3>
+                        <p class="mt-2 text-neutral-300">{component.description}</p>
+                    </div>
+                ))}
+            </div>
+        )}
     </Container>
 </section>

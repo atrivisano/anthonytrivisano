@@ -7,7 +7,7 @@ client: "LifeLearn Inc."
 timeline: "2016-2017"
 role: "Software Developer"
 technologies: ["WordPress", "PHP", "HTML", "CSS", "JavaScript", "Responsive Design", "UI/UX"]
-category: "Web Development"
+category: "Development & Engineering"
 summary: "Developed and managed custom WordPress themes for web products, creating cohesive and branded user experiences while optimizing performance and ensuring accessibility across devices."
 featuredImage: "/images/portfolio/wordpress-theme-development.jpg"
 

@@ -7,7 +7,7 @@ client: "Siskinds LLP"
 timeline: "2019-2022"
 role: "Senior Programmer Analyst"
 technologies: ["Business Process Design", "Data Management", "Stakeholder Communication", "Project Management", "Systems Integration"]
-category: "Business Process Improvement"
+category: "Business & Process Optimization"
 summary: "Led a cross-functional initiative to standardize organizational structure across all business applications and processes, driving data consistency, enabling accurate reporting, and improving operational efficiency across the enterprise."
 featuredImage: "/images/portfolio/org-structure-standardization.jpg"
 

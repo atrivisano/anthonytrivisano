@@ -7,7 +7,7 @@ client: "Multiple Organizations"
 timeline: "2016-Present"
 role: "Various Technical Positions"
 technologies: ["API Design", "RESTful Services", "OAuth", "API Gateway", "JSON", "HTTP", "Laravel", "Integration Architecture"]
-category: "System Integration"
+category: "Development & Engineering"
 summary: "Designed and implemented sophisticated APIs that bridged disconnected systems, enabled secure data exchange, and created flexible integration points for diverse business applications across multiple organizations."
 featuredImage: "/images/portfolio/api-integration.jpg"
 

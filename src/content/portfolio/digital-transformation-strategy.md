@@ -7,7 +7,7 @@ client: "Multiple Organizations"
 timeline: "2018-Present"
 role: "Various Leadership Positions"
 technologies: ["Strategic Planning", "Digital Transformation", "Change Management", "Process Redesign", "Technology Integration"]
-category: "Strategic Planning"
+category: "Leadership & Strategy"
 summary: "Developed and executed comprehensive digital transformation strategies that modernized business operations, integrated advanced technologies, and created more efficient, data-driven processes across multiple organizations."
 featuredImage: "/images/portfolio/digital-transformation.jpg"
 

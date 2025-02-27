@@ -7,7 +7,7 @@ client: "Redding Designs Inc."
 timeline: "2023"
 role: "VP of Development"
 technologies: [ "Budget Planning", "Cost Estimation", "Resource Allocation", "Process Design", "Financial Analysis" ]
-category: "Financial Management"
+category: "Business & Process Optimization"
 summary: "Developed and implemented a comprehensive project budget planning system that introduced structured metrics for cost estimation during the client quotation phase and detailed work hour estimates during project planning, significantly improving financial visibility and project profitability."
 featuredImage: "/images/portfolio/project-budget-planning.jpg"
 

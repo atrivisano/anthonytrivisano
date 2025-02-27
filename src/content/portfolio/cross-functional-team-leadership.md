@@ -7,7 +7,7 @@ client: "Redding Designs Inc."
 timeline: "2023-Present"
 role: "VP of Development"
 technologies: ["Leadership", "Team Building", "Agile Methodologies", "Performance Management", "Mentoring", "Strategic Planning"]
-category: "Leadership"
+category: "Leadership & Strategy"
 summary: "Successfully built and led high-performance cross-functional development teams, fostering a collaborative environment that leveraged individual strengths to consistently deliver exceptional results and drive innovation."
 featuredImage: "/images/portfolio/team-leadership.jpg"
 

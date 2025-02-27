@@ -7,7 +7,7 @@ client: "Multiple Organizations"
 timeline: "2014-Present"
 role: "Various Technical Leadership Positions"
 technologies: ["Code Review", "Static Analysis", "Automated Testing", "Continuous Integration", "Version Control", "Documentation", "Refactoring"]
-category: "Development Practices"
+category: "Development & Engineering"
 summary: "Established and implemented comprehensive coding standards and quality practices that improved code maintainability, reduced technical debt, and enhanced development team efficiency and collaboration."
 featuredImage: "/images/portfolio/code-quality.jpg"
 

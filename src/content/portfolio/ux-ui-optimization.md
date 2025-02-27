@@ -7,7 +7,7 @@ client: "Multiple Organizations"
 timeline: "2014-Present"
 role: "Various Technical Positions"
 technologies: ["UI/UX Design", "Responsive Design", "Usability Testing", "Information Architecture", "Interaction Design", "HTML/CSS", "JavaScript"]
-category: "User Experience"
+category: "User Experience & Design"
 summary: "Designed and optimized user interfaces that balanced aesthetic appeal with functional efficiency, creating intuitive experiences that improved user satisfaction, reduced learning curves, and supported business objectives."
 featuredImage: "/images/portfolio/ux-optimization.jpg"
 

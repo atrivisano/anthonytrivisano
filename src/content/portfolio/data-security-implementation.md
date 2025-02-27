@@ -7,7 +7,7 @@ client: "Siskinds LLP"
 timeline: "2018-2023"
 role: "Senior Programmer Analyst"
 technologies: ["Data Encryption", "Access Controls", "Secure API Design", "Authentication", "Compliance", "Laravel", "Secure Development"]
-category: "Security Implementation"
+category: "Security & Compliance"
 summary: "Designed and implemented comprehensive security measures for managing sensitive and personal data, ensuring regulatory compliance while maintaining system usability and enabling efficient business operations."
 featuredImage: "/images/portfolio/data-security.jpg"
 

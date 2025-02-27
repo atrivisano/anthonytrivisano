@@ -7,7 +7,7 @@ client: "Siskinds LLP"
 timeline: "2020 - 2021"
 role: "Lead Developer & UML Architect"
 technologies: ["Laravel", "WordPress", "PHP", "API Development", "MySQL", "UML", "JavaScript", "HTML/CSS"]
-category: "Web Applications"
+category: "Development & Engineering"
 summary: "Developed a comprehensive Class Action Intake System for a leading law firm to securely manage client data throughout the class action litigation process. The system features dynamic form generation, secure data handling, and seamless integration between closed networks and web platforms through a custom API."
 featuredImage: "/images/portfolio/class-actions-intake-system.jpg"
 

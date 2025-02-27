@@ -7,7 +7,7 @@ client: "Multiple Organizations"
 timeline: "2014-Present"
 role: "Various Technical Leadership Roles"
 technologies: ["Technical Writing", "Process Mapping", "UML Diagramming", "Knowledge Management", "Documentation Systems"]
-category: "Business Process Management"
+category: "Business & Process Optimization"
 summary: "Created comprehensive technical documentation and Standard Operating Procedures (SOPs) for various business solutions, enabling consistent implementation, reducing knowledge gaps, and facilitating efficient onboarding and training."
 featuredImage: "/images/portfolio/business-documentation.jpg"
 

@@ -7,7 +7,7 @@ client: "Redding Designs Inc."
 timeline: "2023"
 role: "VP of Development"
 technologies: ["Data Analysis", "Business Intelligence", "Strategic Planning", "Client Profiling", "Market Research"]
-category: "Business Intelligence"
+category: "Leadership & Strategy"
 summary: "Conducted a thorough analysis of historical client data to identify industry patterns, develop strategic targeting approaches, and highlight key case studies for marketing emphasis, resulting in more focused business development efforts and improved client acquisition."
 featuredImage: "/images/portfolio/client-industry-analysis.jpg"
 

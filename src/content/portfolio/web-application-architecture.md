@@ -7,7 +7,7 @@ client: "Multiple Organizations"
 timeline: "2014-Present"
 role: "Various Technical Positions"
 technologies: ["Laravel", "System Architecture", "API Design", "Database Design", "Security", "Scalability", "Integration"]
-category: "System Architecture"
+category: "Development & Engineering"
 summary: "Designed and implemented robust web application architectures that balanced scalability, security, and performance while meeting complex business requirements and enabling future growth and adaptation."
 featuredImage: "/images/portfolio/web-architecture.jpg"
 

@@ -7,7 +7,7 @@ client: "Redding Designs Inc."
 timeline: "2023"
 role: "VP of Development & Project Manager"
 technologies: ["Process Design", "Team Leadership", "Workflow Optimization", "Project Management", "Documentation", "Agile Methodologies"]
-category: "Process Improvement"
+category: "Business & Process Optimization"
 summary: "Led a strategic initiative to analyze and reform development workflows and processes, resulting in a 64% reduction in development lifecycle time while improving team satisfaction and enabling greater innovation."
 featuredImage: "/images/portfolio/workflow-optimization.jpg"
 

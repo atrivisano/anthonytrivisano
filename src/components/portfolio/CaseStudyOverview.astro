@@ -11,42 +11,40 @@ interface Props {
 
 const { client, timeline, role, technologies, summary } = Astro.props;
 ---
-<section class="py-16 sm:py-24 bg-neutral-900">
-    <Container>
-        <div class="mx-auto max-w-2xl lg:max-w-none">
-            <h2 class="text-3xl font-bold tracking-tight text-white">Project Overview</h2>
+<section class="py-16 sm:py-24 bg-neutral-950">
+    <Container class="flex flex-col gap-10">
+        <h2 class="text-3xl font-bold tracking-tight text-white">Project Overview</h2>
 
-            <div class="mt-10 grid grid-cols-1 gap-y-8 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
-                <div class="border border-neutral-800 p-6">
-                    <h3 class="text-lg font-semibold text-white">Client</h3>
-                    <p class="mt-2 text-neutral-400">{client}</p>
-                </div>
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="rounded-3xl border border-neutral-800 bg-neutral-900 p-6">
+                <h3 class="text-lg font-semibold text-white">Client</h3>
+                <p class="mt-2 text-neutral-300">{client}</p>
+            </div>
 
-                <div class="border border-neutral-800 p-6">
-                    <h3 class="text-lg font-semibold text-white">Timeline</h3>
-                    <p class="mt-2 text-neutral-400">{timeline}</p>
-                </div>
+            <div class="rounded-3xl border border-neutral-800 bg-neutral-900 p-6">
+                <h3 class="text-lg font-semibold text-white">Timeline</h3>
+                <p class="mt-2 text-neutral-300">{timeline}</p>
+            </div>
 
-                <div class="border border-neutral-800 p-6">
-                    <h3 class="text-lg font-semibold text-white">Role</h3>
-                    <p class="mt-2 text-neutral-400">{role}</p>
-                </div>
+            <div class="rounded-3xl border border-neutral-800 bg-neutral-900 p-6">
+                <h3 class="text-lg font-semibold text-white">Role</h3>
+                <p class="mt-2 text-neutral-300">{role}</p>
+            </div>
 
-                <div class="border border-neutral-800 p-6 sm:col-span-2 lg:col-span-2">
-                    <h3 class="text-lg font-semibold text-white">Technologies</h3>
-                    <div class="mt-4 flex flex-wrap gap-2">
-                        {technologies.map(tech => (
-                            <span class="inline-flex items-center border border-neutral-800 bg-neutral-800 px-2 py-1 text-xs font-medium text-neutral-300">{tech}</span>
-                        ))}
-                    </div>
+            <div class="rounded-3xl border border-neutral-800 bg-neutral-900 p-6 sm:col-span-2">
+                <h3 class="text-lg font-semibold text-white">Technologies</h3>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    {technologies.map(tech => (
+                        <span class="inline-flex items-center rounded-3xl border border-neutral-800 bg-neutral-800 px-2.5 py-1.5 text-xs font-medium text-neutral-300">{tech}</span>
+                    ))}
                 </div>
+            </div>
 
-                <div class="border border-neutral-800 p-6 sm:col-span-2 lg:col-span-3">
-                    <h3 class="text-lg font-semibold text-white">Project Summary</h3>
-                    <p class="mt-2 text-neutral-400">
-                        {summary}
-                    </p>
-                </div>
+            <div class="rounded-3xl border border-neutral-800 bg-neutral-900 p-6 sm:col-span-2 lg:col-span-3">
+                <h3 class="text-lg font-semibold text-white">Project Summary</h3>
+                <p class="mt-2 text-neutral-300">
+                    {summary}
+                </p>
             </div>
         </div>
     </Container>

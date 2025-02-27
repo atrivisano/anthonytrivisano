@@ -7,7 +7,7 @@ client: "LifeLearn Inc."
 timeline: "2016-2017"
 role: "Software Developer"
 technologies: ["JIRA", "Agile Methodologies", "Business Process Design", "Project Management", "Workflow Automation"]
-category: "Project Management"
+category: "Business & Process Optimization"
 summary: "Championed and led the implementation of JIRA workflows that standardized issue tracking, streamlined project management processes, and improved team collaboration across the organization."
 featuredImage: "/images/portfolio/jira-workflow.jpg"
 
