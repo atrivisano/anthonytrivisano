@@ -1,0 +1,50 @@
+---
+import PrimaryButton from "../PrimaryButton.astro";
+import BlogPostCard from "./BlogPostCard.astro";
+import { getCollection } from 'astro:content';
+
+// Get all blog posts
+const allBlogPosts = await getCollection('blog');
+
+// Sort by date (newest first) and take the 3 most recent posts
+const featuredPosts = allBlogPosts
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .slice(0, 3);
+---
+
+<!-- Recent Blog Posts -->
+<section class="relative py-20 bg-neutral-950">
+    <div class="mx-auto max-w-7xl">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+            <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Latest Insights</h2>
+            <p class="mt-6 text-lg leading-8 text-white">
+                Thoughts and perspectives on development leadership, project management, and technical innovation.
+            </p>
+        </div>
+
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {featuredPosts.map((post) => (
+                <BlogPostCard
+                    title={post.data.title}
+                    description={post.data.description}
+                    imageUrl={post.data.image.src}
+                    imageAlt={post.data.image.alt}
+                    author={post.data.author}
+                    date={post.data.date}
+                    categories={post.data.categories}
+                    tags={post.data.tags}
+                    link={`/blog/${post.data.slug}`}
+                />
+            ))}
+        </div>
+
+        <div class="mt-16 text-center">
+            <PrimaryButton href="/blog">
+                View All Articles
+                <svg class="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+                </svg>
+            </PrimaryButton>
+        </div>
+    </div>
+</section>

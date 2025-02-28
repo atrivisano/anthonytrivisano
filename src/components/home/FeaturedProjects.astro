@@ -1,0 +1,53 @@
+---
+import PrimaryButton from "../PrimaryButton.astro";
+import ProjectCard from "./ProjectCard.astro";
+import { getCollection } from 'astro:content';
+
+// Get all portfolio items that aren't drafts
+const allPortfolioItems = await getCollection('portfolio', ({ data }) => {
+    return !data.draft;
+});
+
+// Randomly select 3 portfolio items
+const getRandomItems = (items, count) => {
+    const shuffled = [...items].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+};
+
+const featuredProjects = getRandomItems(allPortfolioItems, 3);
+
+---
+
+<!-- Recent Projects -->
+<section class="relative py-20 bg-neutral-950">
+    <div class="mx-auto max-w-7xl">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+            <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Featured Projects</h2>
+            <p class="mt-6 text-lg leading-8 text-white">
+                A selection of my recent work in development leadership and process optimization.
+            </p>
+        </div>
+
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {featuredProjects.map((project) => (
+                <ProjectCard
+                    title={project.data.title}
+                    description={project.data.summary}
+                    imageUrl={project.data.featuredImage || "/api/placeholder/600/400"}
+                    link={`/portfolio/${project.slug}`}
+                    technologies={project.data.technologies}
+                    client={project.data.client}
+                />
+            ))}
+        </div>
+
+        <div class="mt-16 text-center">
+            <PrimaryButton href="/portfolio">
+                View All Projects
+                <svg class="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+                </svg>
+            </PrimaryButton>
+        </div>
+    </div>
+</section>

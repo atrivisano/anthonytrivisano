@@ -1,0 +1,17 @@
+---
+interface Props {
+    value: string;
+    description: string;
+    isWide?: boolean;
+}
+
+const { value, description, isWide = false } = Astro.props;
+---
+
+<div class:list={[
+    "rounded-2xl bg-neutral-900 p-6 ring-1 ring-neutral-700",
+    isWide && "col-span-2"
+]}>
+    <div class="font-semibold text-white">{value}</div>
+    <div class="mt-2 text-sm text-white">{description}</div>
+</div>

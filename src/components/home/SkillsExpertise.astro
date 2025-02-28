@@ -1,0 +1,53 @@
+---
+import SkillItem from "./SkillItem.astro";
+import StatCard from "./StatCard.astro";
+
+const skills = [
+    'Full Stack Development',
+    'Project Management',
+    'Process Optimization',
+    'Team Leadership',
+    'API Development',
+    'Enterprise Solutions'
+];
+
+const stats = [
+    { value: '14 → 5', description: 'Weeks reduced from development lifecycle', isWide: true },
+    { value: '100+', description: 'Projects Completed', isWide: false },
+    { value: '15+', description: 'Years Experience', isWide: false },
+    { value: '24/7', description: 'Support & Maintenance', isWide: false }
+];
+---
+
+<!-- Skills & Expertise -->
+<section class="bg-neutral-950 py-20">
+    <div class="mx-auto max-w-7xl">
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-24 items-center">
+            <div>
+                <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Skills & Expertise</h2>
+                <p class="mt-6 text-lg text-gray-600 dark:text-gray-300">
+                    With over a decade of experience in development and leadership, I bring a comprehensive skill set to every project.
+                </p>
+                <div class="mt-10 grid gap-6 sm:grid-cols-2">
+                    {skills.map((skill) => (
+                        <SkillItem skill={skill} />
+                    ))}
+                </div>
+            </div>
+            <div class="relative">
+                <div class="absolute inset-0 -z-10">
+                    <div class="absolute right-1/2 bottom-1/2 h-[300px] w-[300px] -translate-y-1/2 rounded-full bg-gradient-radial from-neutral-50 to-neutral-500/20 blur-3xl dark:from-neutral-900/30"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    {stats.map((stat) => (
+                        <StatCard
+                            value={stat.value}
+                            description={stat.description}
+                            isWide={stat.isWide}
+                        />
+                    ))}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -2,8 +2,11 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import PrimaryButton from "../components/PrimaryButton.astro";
-import SecondaryButton from "../components/SecondaryButton.astro";
+import HeroSection from '../components/home/HeroSection.astro';
+import FeaturedProjects from '../components/home/FeaturedProjects.astro';
+import FeaturedBlogPosts from '../components/home/FeaturedBlogPosts.astro';
+import SkillsExpertise from '../components/home/SkillsExpertise.astro';
+import CTASection from '../components/home/CTASection.astro';
 ---
 
 <MainLayout title="Anthony Trivisano - VP of Development & Project Management">
@@ -11,165 +14,11 @@ import SecondaryButton from "../components/SecondaryButton.astro";
         <Header slot="header" />
 
         <main>
-            <!-- Hero Section -->
-            <section class="relative bg-neutral-950">
-                <div class="px-6 py-24 sm:py-32 lg:px-8">
-                    <div class="mx-auto max-w-7xl">
-                        <div class="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-                            <div>
-                                <div class="inline-flex items-center border border-white px-3 py-1 text-sm">
-                                    <svg class="mr-1 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
-                                    </svg>
-                                    Available for new projects
-                                </div>
-
-                                <h1 class="mt-6 text-4xl font-bold tracking-tight sm:text-6xl">
-                                    Transforming Development Through
-                                    <span class="block mt-2">Strategic Leadership</span>
-                                </h1>
-
-                                <p class="mt-6 text-lg leading-8">
-                                    VP of Development & Project Management with a passion for optimizing workflows and driving innovation. Proven track record of reducing development lifecycles and improving team satisfaction.
-                                </p>
-
-                                <div class="mt-10 flex items-center gap-x-6">
-                                    <PrimaryButton href="/portfolio">View Portfolio</PrimaryButton>
-                                    <SecondaryButton href="/contact">Contact Me</SecondaryButton>
-                                </div>
-                            </div>
-
-                            <div class="relative">
-                                <img
-                                    src="/home-hero.png"
-                                    alt="Featured project preview"
-                                    class="w-full"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Recent Projects -->
-            <section class="relative py-24 sm:py-32 bg-neutral-950">
-                <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div class="mx-auto max-w-2xl text-center mb-16">
-                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Featured Projects</h2>
-                        <p class="mt-6 text-lg leading-8 text-white">
-                            A selection of my recent work in development leadership and process optimization.
-                        </p>
-                    </div>
-
-                    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                        {[1, 2, 3].map(() => (
-                            <div class="group relative overflow-hidden rounded-2xl bg-neutral-900 shadow-md hover:shadow-xl transition-all duration-300">
-                                <div class="aspect-[16/9] overflow-hidden">
-                                    <img
-                                        src="/api/placeholder/600/400"
-                                        alt="Project preview"
-                                        class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                                    />
-                                </div>
-                                <div class="p-6">
-                                    <h3 class="text-xl font-semibold text-white">Project Name</h3>
-                                    <p class="mt-4 text-white">Brief project description highlighting key achievements and technologies used.</p>
-                                    <a href="/portfolio" class="mt-6 inline-flex items-center text-sm font-medium text-white hover:text-neutral-200">
-                                        Learn more
-                                        <svg class="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div class="mt-16 text-center">
-                        <PrimaryButton href="/portfolio">
-                            View All Projects
-                            <svg class="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
-                            </svg>
-                        </PrimaryButton>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Skills & Expertise -->
-            <section class="bg-neutral-950 py-24 sm:py-32">
-                <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div class="grid md:grid-cols-2 gap-12 lg:gap-24 items-center">
-                        <div>
-                            <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Skills & Expertise</h2>
-                            <p class="mt-6 text-lg text-gray-600 dark:text-gray-300">
-                                With over a decade of experience in development and leadership, I bring a comprehensive skill set to every project.
-                            </p>
-                            <div class="mt-10 grid gap-6 sm:grid-cols-2">
-                                {[
-                                    'Full Stack Development',
-                                    'Project Management',
-                                    'Process Optimization',
-                                    'Team Leadership',
-                                    'API Development',
-                                    'Enterprise Solutions'
-                                ].map((skill) => (
-                                    <div class="flex items-center gap-3">
-                                        <div class="flex-shrink-0 rounded-lg bg-neutral-900 p-1">
-                                            <svg class="w-5 h-5 text-neutral-600 dark:text-neutral-400" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
-                                        <span class="text-gray-700 dark:text-gray-300">{skill}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                        <div class="relative">
-                            <div class="absolute inset-0 -z-10">
-                                <div class="absolute right-1/2 bottom-1/2 h-[300px] w-[300px] -translate-y-1/2 rounded-full bg-gradient-radial from-neutral-50 to-neutral-500/20 blur-3xl dark:from-neutral-900/30"></div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-6">
-                                {[1, 2, 3, 4].map((index) => (
-                                    <div class:list={[
-                                        "rounded-2xl bg-neutral-900 p-6 ring-1 ring-neutral-700",
-                                        index === 1 && "col-span-2"
-                                    ]}>
-                                        <div class="font-semibold text-white">{
-                                            index === 1 ? '14 → 5' :
-                                                index === 2 ? '100+' :
-                                                    index === 3 ? '15+' :
-                                                        '24/7'
-                                        }</div>
-                                        <div class="mt-2 text-sm text-white">{
-                                            index === 1 ? 'Weeks reduced from development lifecycle' :
-                                                index === 2 ? 'Projects Completed' :
-                                                    index === 3 ? 'Years Experience' :
-                                                        'Support & Maintenance'
-                                        }</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- CTA Section -->
-            <section class="relative isolate overflow-hidden bg-neutral-950 py-16 sm:py-24">
-                <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div class="mx-auto max-w-2xl text-center">
-                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Ready to Transform Your Development Process?</h2>
-                        <p class="mx-auto mt-6 max-w-xl text-lg leading-8 text-white">
-                            Let's discuss how my experience in development leadership and process optimization can benefit your organization.
-                        </p>
-                        <div class="mt-10 flex items-center justify-center gap-x-6">
-                            <PrimaryButton href="/contact">Get in Touch</PrimaryButton>
-                            <SecondaryButton href="/about">Learn More</SecondaryButton>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <HeroSection />
+            <FeaturedProjects />
+            <FeaturedBlogPosts />
+            <SkillsExpertise />
+            <CTASection />
         </main>
 
         <Footer slot="footer" />
