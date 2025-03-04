@@ -1,49 +1,85 @@
 ---
+// src/pages/blog/index.astro
 import { getCollection } from 'astro:content';
-import BlogHero from '../../components/blog/BlogHero.astro';
-import FeaturedPost from '../../components/blog/FeaturedPost.astro';
-import PostGrid from '../../components/blog/PostGrid.astro';
-import NewsletterSignup from '../../components/blog/NewsletterSignup.astro';
-import CategoryCloud from '../../components/blog/CategoryCloud.astro';
-import MainLayout from "../../layouts/MainLayout.astro";
+import MainLayout from '../../layouts/MainLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BlogPostCard from '../../components/blog/PostCard.astro';
+import CategoryNav from '../../components/blog/CategoryNav.astro';
 
-// Get all blog posts and sort by date (newest first)
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
+// Get all blog posts that aren't drafts
+const posts = await getCollection('blog');
 
-// Extract all unique categories for the filter
-const allCategories = [...new Set(posts.flatMap(post => post.data.categories || []))];
+// Make sure posts is an array before sorting
+const postsArray = Array.isArray(posts) ? posts : [];
 
-// SEO metadata
-const title = 'Blog | Anthony Trivisano';
-const description = 'Insights on API development, digital transformation, team leadership, data security, and database optimization from a seasoned developer and technical leader.';
+// Sort posts by date (newest first)
+const sortedPosts = [...postsArray].sort((a, b) => {
+	// Check if data and date exist before comparing
+	if (a.data?.date && b.data?.date) {
+		return new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf();
+	}
+	return 0;
+});
+
+// Extract all unique categories for the category nav
+const categories = [...new Set(
+	Array.isArray(posts)
+		? posts.flatMap(post => post.data?.categories || [])
+		: []
+)];
+
+// Define page metadata
+const pageTitle = "Blog - Anthony Trivisano";
+const pageDescription = "Insights on development leadership, project management, and technical innovations from Anthony Trivisano.";
 ---
 
-<MainLayout title={title} description={description}>
-	<!-- Hero Section -->
-	<BlogHero
-		title="Insights & Expertise"
-		description="Sharing professional insights on web development, leadership, security, and digital transformation. Explore practical advice based on real-world experience."
-		categories={allCategories}
-	/>
+<MainLayout title={pageTitle} description={pageDescription}>
+	<div class="bg-neutral-950">
+		<Header slot="header" />
 
-	<main class="container mx-auto px-4 py-12">
-		<!-- Featured Post Section -->
-		{posts.length > 0 && <FeaturedPost post={posts[0]} />}
+		<main class="min-h-screen">
+			<!-- Page Header -->
+			<section class="bg-neutral-950 py-16 md:py-24">
+				<div class="container mx-auto px-6">
+					<div class="max-w-4xl mx-auto text-center">
+						<h1 class="text-3xl md:text-5xl font-bold text-white mb-6">
+							Blog & Insights
+						</h1>
+						<p class="text-xl text-neutral-300 mb-8">
+							Thoughts on development leadership, project management, and technical innovation.
+						</p>
+					</div>
+				</div>
+			</section>
 
-		<!-- All Posts Section -->
-		<PostGrid
-			posts={posts}
-			startIndex={1}
-		/>
+			<!-- Category Navigation -->
+			<CategoryNav
+				categories={categories}
+				currentCategory="All"
+			/>
 
-		<!-- Newsletter Signup Section -->
-		<NewsletterSignup />
+			<!-- Blog Posts -->
+			<section class="py-12 md:py-16 bg-neutral-950">
+				<div class="container mx-auto px-6">
+					{sortedPosts.length > 0 ? (
+						<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+							{sortedPosts.map(post => (
+								<BlogPostCard post={post} />
+							))}
+						</div>
+					) : (
+						<div class="text-center py-16">
+							<h2 class="text-2xl font-medium text-white mb-4">No posts found</h2>
+							<p class="text-neutral-300 mb-8">
+								There are currently no blog posts available. Check back soon for new content!
+							</p>
+						</div>
+					)}
+				</div>
+			</section>
+		</main>
 
-		<!-- Categories/Topics Cloud Section -->
-		<CategoryCloud
-			categories={allCategories}
-		/>
-	</main>
+		<Footer slot="footer" />
+	</div>
 </MainLayout>

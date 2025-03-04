@@ -1,0 +1,139 @@
+---
+// src/pages/blog/tag/[tag].astro
+import { getCollection } from 'astro:content';
+import MainLayout from '../../../layouts/MainLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import BlogPostCard from '../../../components/blog/PostCard.astro';
+import TagCloud from '../../../components/blog/TagCloud.astro';
+
+export async function getStaticPaths() {
+    const posts = await getCollection('blog');
+
+    // Make sure posts is an array and has data
+    const validPosts = Array.isArray(posts) ? posts : [];
+
+    // Extract all unique tags from blog posts
+    const allTags = [...new Set(validPosts.flatMap(post =>
+        post.data && Array.isArray(post.data.tags) ? post.data.tags : []
+    ))];
+
+    // Create a path for each tag
+    return allTags.map(tag => {
+        const filteredPosts = validPosts.filter(post =>
+            post.data && Array.isArray(post.data.tags) && post.data.tags.includes(tag)
+        );
+
+        return {
+            params: { tag: tag.toLowerCase().replace(/\s+/g, '-') },
+            props: {
+                tag,
+                posts: filteredPosts,
+                allTags
+            }
+        };
+    });
+}
+
+const { tag, posts, allTags } = Astro.props;
+
+// Make sure posts is an array before sorting
+const postsArray = Array.isArray(posts) ? posts : [];
+
+// Sort posts by date (newest first)
+const sortedPosts = [...postsArray].sort((a, b) => {
+    // Check if data and date exist before comparing
+    if (a.data?.date && b.data?.date) {
+        return new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf();
+    }
+    return 0;
+});
+
+// Count posts for each tag for the tag cloud
+const tagCounts = allTags && Array.isArray(allTags)
+    ? allTags.map(t => {
+        const count = Array.isArray(postsArray)
+            ? postsArray.filter(post =>
+                post.data && Array.isArray(post.data.tags) && post.data.tags.includes(t)
+            ).length
+            : 0;
+
+        return { tag: t, count };
+    })
+    : [];
+
+const pageTitle = `#${tag} - Anthony Trivisano Blog`;
+const pageDescription = `Articles tagged with #${tag} by Anthony Trivisano, VP of Development & Project Management.`;
+---
+
+<MainLayout title={pageTitle} description={pageDescription}>
+    <div class="bg-neutral-950">
+        <Header slot="header" />
+
+        <main class="min-h-screen">
+            <!-- Page Header -->
+            <section class="bg-neutral-950 py-16 md:py-24">
+                <div class="container mx-auto px-6">
+                    <div class="max-w-4xl mx-auto text-center">
+                        <span class="inline-block mb-4 px-4 py-2 bg-neutral-800 text-white rounded-full font-medium">
+                            #{tag}
+                        </span>
+                        <h1 class="text-3xl md:text-5xl font-bold text-white mb-6">
+                            Articles tagged with #{tag}
+                        </h1>
+                        <p class="text-xl text-neutral-300">
+                            {sortedPosts.length} article{sortedPosts.length === 1 ? '' : 's'} found
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Content Section -->
+            <section class="py-12 md:py-16 bg-neutral-950">
+                <div class="container mx-auto px-6">
+                    <div class="lg:grid lg:grid-cols-4 gap-12">
+                        <!-- Sidebar with Tag Cloud -->
+                        <aside class="lg:col-span-1 mb-12 lg:mb-0">
+                            <div class="sticky top-24">
+                                <h2 class="text-xl font-bold text-white mb-6">Popular Tags</h2>
+                                <TagCloud tags={tagCounts} currentTag={tag} />
+
+                                <div class="mt-8">
+                                    <a
+                                        href="/blog/"
+                                        class="inline-flex items-center text-neutral-400 hover:text-white transition-colors"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                        </svg>
+                                        Back to all articles
+                                    </a>
+                                </div>
+                            </div>
+                        </aside>
+
+                        <!-- Main Content: Blog Posts -->
+                        <div class="lg:col-span-3">
+                            {sortedPosts.length > 0 ? (
+                                <div class="grid gap-8 md:grid-cols-2">
+                                    {sortedPosts.map(post => (
+                                        <BlogPostCard post={post} />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div class="text-center py-16 bg-neutral-900 rounded-xl">
+                                    <h2 class="text-2xl font-medium text-white mb-4">No posts found</h2>
+                                    <p class="text-neutral-300 mb-8">
+                                        There are currently no posts with this tag. Try exploring other tags!
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <Footer slot="footer" />
+    </div>
+</MainLayout>

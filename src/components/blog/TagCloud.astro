@@ -1,0 +1,58 @@
+---
+// src/components/blog/TagCloud.astro
+export interface Props {
+    tags: Array<{
+        tag: string;
+        count: number;
+    }>;
+    currentTag?: string;
+}
+
+const { tags, currentTag } = Astro.props;
+
+// Sort tags by count (most used first)
+const sortedTags = Array.isArray(tags)
+    ? [...tags].sort((a, b) => b.count - a.count)
+    : [];
+
+// Get tag URL slug
+const getTagSlug = (tag: string) => {
+    return tag.toLowerCase().replace(/\s+/g, '-');
+};
+
+// Calculate font size based on count (minimum 14px, maximum 20px)
+const getFontSize = (count: number) => {
+    if (!Array.isArray(tags) || tags.length === 0) return '14px';
+
+    const max = Math.max(...tags.map(t => t.count));
+    const min = Math.min(...tags.map(t => t.count));
+    const range = max - min || 1;
+
+    // Map count to a size between 14 and 20
+    const size = 14 + ((count - min) / range) * 6;
+    return `${size.toFixed(1)}px`;
+};
+---
+
+<div class="flex flex-wrap gap-3">
+    {Array.isArray(sortedTags) && sortedTags.map(({ tag, count }) => {
+        const isActive = tag === currentTag;
+
+        return (
+            <a
+                href={`/blog/tag/${getTagSlug(tag)}`}
+                class:list={[
+                    'px-3 py-1.5 rounded-full text-sm transition-colors whitespace-nowrap',
+                    {
+                        'bg-white text-neutral-900 hover:bg-neutral-200': isActive,
+                        'bg-neutral-800 text-neutral-300 hover:bg-neutral-700 hover:text-white': !isActive
+                    }
+                ]}
+                style={`font-size: ${getFontSize(count)};`}
+            >
+                #{tag}
+                <span class="ml-1 text-xs">{count}</span>
+            </a>
+        );
+    })}
+</div>
