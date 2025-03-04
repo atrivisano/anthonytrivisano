@@ -55,11 +55,11 @@ const { title, date, author, categories, image } = Astro.props;
     </div>
 
     {image?.src && (
-        <div class="aspect-square rounded-xl overflow-hidden mb-8 shadow-lg">
+        <div class="aspect-16/9 rounded-xl overflow-hidden mb-8 shadow-lg">
             <img
                 src={image.src}
                 alt={image.alt || title}
-                class="w-full h-auto object-cover"
+                class="w-full h-auto object-center"
             />
         </div>
     )}

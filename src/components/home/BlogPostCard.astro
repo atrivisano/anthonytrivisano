@@ -34,24 +34,28 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
 const primaryCategory = categories.length > 0 ? categories[0] : null;
 ---
 
-<div class="group relative overflow-hidden rounded-2xl bg-neutral-900 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full">
-    <div class="aspect-[16/9] overflow-hidden">
+<div
+    class="group relative overflow-hidden rounded-2xl bg-neutral-900 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+    <a href={link} class="aspect-16/9 overflow-hidden">
         <img
             src={imageUrl}
             alt={imageAlt}
             class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
         />
-    </div>
+    </a>
     <div class="p-6 flex flex-col flex-grow">
         {primaryCategory && (
             <div class="mb-3">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-neutral-800 text-neutral-200">
+                <span
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-neutral-800 text-neutral-200">
                     {primaryCategory}
                 </span>
             </div>
         )}
 
-        <h3 class="text-xl font-semibold text-white">{title}</h3>
+        <h3 class="text-xl font-semibold text-white">
+            <a href={link} class="hover:text-neutral-300 transition-colors">{title}</a>
+        </h3>
 
         <div class="mt-2 flex items-center text-sm text-neutral-400">
             <span>{author}</span>
@@ -74,10 +78,12 @@ const primaryCategory = categories.length > 0 ? categories[0] : null;
             )}
         </div>
 
-        <a href={link} class="mt-6 inline-flex items-center text-sm font-medium text-white hover:text-neutral-200">
+        <a href={link} class="mt-6 inline-flex items-center text-sm font-medium text-white hover:text-neutral-300">
             Read Article
             <svg class="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+                <path fill-rule="evenodd"
+                      d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+                      clip-rule="evenodd"/>
             </svg>
         </a>
     </div>

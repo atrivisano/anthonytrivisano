@@ -1,0 +1,168 @@
+---
+// src/components/MobileMenu.astro
+const navigation = [
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Portfolio', href: '/portfolio' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'Contact', href: '/contact' },
+];
+
+// Get current path to highlight active link
+const pathname = Astro.url.pathname;
+---
+
+<nav class="hidden md:flex space-x-8">
+    {
+        navigation.map((item) => (
+            <a
+                href={item.href}
+                class:list={[
+                    "text-base font-medium transition-colors",
+                    pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
+                        ? "text-white"
+                        : "text-gray-200 hover:text-white"
+                ]}
+            >
+                {item.name}
+            </a>
+        ))
+    }
+</nav>
+
+<!-- Mobile menu button -->
+<div class="md:hidden">
+    <button
+        type="button"
+        class="text-white hover:text-neutral-200"
+        aria-label="Toggle menu"
+        id="mobile-menu-toggle"
+    >
+        <svg
+            id="menu-icon"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+            />
+        </svg>
+        <svg
+            id="close-icon"
+            class="h-6 w-6 hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+            />
+        </svg>
+    </button>
+</div>
+
+<!-- Mobile menu overlay -->
+<div
+    id="mobile-menu"
+    class="fixed inset-0 bg-neutral-900 bg-opacity-95 z-50 flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out md:hidden"
+>
+    <div class="flex justify-end p-6">
+        <button
+            type="button"
+            class="text-white hover:text-neutral-200"
+            aria-label="Close menu"
+            id="mobile-menu-close"
+        >
+            <svg
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                />
+            </svg>
+        </button>
+    </div>
+    <div class="flex flex-col items-center justify-center flex-1 p-6">
+        {
+            navigation.map((item) => (
+                <a
+                    href={item.href}
+                    class:list={[
+                        "text-2xl font-medium py-4 transition-colors",
+                        pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
+                            ? "text-white"
+                            : "text-gray-300 hover:text-white"
+                    ]}
+                >
+                    {item.name}
+                </a>
+            ))
+        }
+    </div>
+</div>
+
+<script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        const closeIcon = document.getElementById('close-icon');
+
+        // Function to open the mobile menu
+        const openMenu = () => {
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+            mobileMenu.classList.remove('translate-x-full');
+            mobileMenu.classList.add('translate-x-0');
+            menuIcon.classList.add('hidden');
+            closeIcon.classList.remove('hidden');
+        };
+
+        // Function to close the mobile menu
+        const closeMenu = () => {
+            document.body.style.overflow = ''; // Re-enable scrolling
+            mobileMenu.classList.remove('translate-x-0');
+            mobileMenu.classList.add('translate-x-full');
+            menuIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+        };
+
+        // Toggle menu when hamburger icon is clicked
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', openMenu);
+        }
+
+        // Close menu when X icon is clicked
+        if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', closeMenu);
+        }
+
+        // Close menu when clicking a navigation link
+        const mobileNavLinks = mobileMenu?.querySelectorAll('a');
+        mobileNavLinks?.forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        // Close menu when ESC key is pressed
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !mobileMenu?.classList.contains('translate-x-full')) {
+                closeMenu();
+            }
+        });
+    });
+</script>
