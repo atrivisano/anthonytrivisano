@@ -5,7 +5,7 @@ description: "Learn proven strategies for optimizing database performance that b
 date: "2025-01-30"
 author: "Anthony Trivisano"
 image: 
-  src: "/images/blog/database-optimization.jpg"
+  src: "/blog/database-optimization.jpg"
   alt: "Database architecture diagram with performance optimization indicators"
 categories: ["Development", "Database", "Performance"]
 tags: ["Database Optimization", "SQL", "Query Performance", "Indexing", "Data Modeling", "Scalability", "MySQL"]

@@ -5,7 +5,7 @@ description: "Learn essential strategies for implementing robust data security m
 date: "2025-02-05"
 author: "Anthony Trivisano"
 image: 
-  src: "/images/blog/data-security.jpg"
+  src: "/blog/data-security.jpg"
   alt: "Secure digital data visualization with lock and shield symbols"
 categories: ["Security", "Data Management", "Compliance"]
 tags: ["Data Security", "Sensitive Information", "Security Implementation", "Privacy", "Compliance", "Access Controls", "Encryption"]

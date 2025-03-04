@@ -5,7 +5,7 @@ description: "Learn how to develop and implement a successful digital transforma
 date: "2025-02-15"
 author: "Anthony Trivisano"
 image:
-  src: "/images/blog/digital-transformation.jpg"
+  src: "/blog/digital-transformation-1.jpg"
   alt: "Business professional analyzing digital transformation strategy on modern displays"
 categories: ["Strategy", "Digital Transformation", "Leadership"]
 tags: ["Digital Transformation", "Business Strategy", "Change Management", "Technology Integration", "Process Redesign"]

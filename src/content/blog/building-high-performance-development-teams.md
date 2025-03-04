@@ -5,7 +5,7 @@ description: "Discover proven strategies for building and leading high-performan
 date: "2025-02-10"
 author: "Anthony Trivisano"
 image: 
-  src: "/images/blog/development-teams.jpg"
+  src: "/blog/development-teams.jpg"
   alt: "Diverse team of developers collaborating on a project in a modern office environment"
 categories: ["Leadership", "Team Building", "Development"]
 tags: ["Team Leadership", "Development Teams", "Talent Development", "Cross-Functional Teams", "Collaboration", "Performance Management"]
