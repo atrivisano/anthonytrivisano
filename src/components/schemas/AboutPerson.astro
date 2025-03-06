@@ -1,0 +1,145 @@
+---
+interface WorkExperience {
+    name: string;
+    position: string;
+    startDate: string;
+    endDate?: string;
+    description: string;
+}
+
+interface Skill {
+    name: string;
+    category?: string;
+}
+
+interface Props {
+    name?: string;
+    jobTitle?: string;
+    description?: string;
+    url?: string;
+    imageUrl?: string;
+    workExperience?: WorkExperience[];
+    skills?: Skill[];
+    socialProfiles?: string[];
+    additionalInfo?: Record<string, string>;
+}
+
+const {
+    name = "Anthony Trivisano",
+    jobTitle = "Technology Leadership & Web Consultant",
+    description = "Expert in technology leadership, database optimization, and digital transformation with 15+ years of experience helping organizations succeed.",
+    url = Astro.site?.toString() || "https://anthonytrivisano.com",
+    imageUrl = "/home-hero.png", // Update with your actual image path
+    workExperience = [],
+    skills = [],
+    socialProfiles = [
+        "https://linkedin.com/in/anthonytrivisano",
+        "https://github.com/anthonytrivisano",
+        "https://twitter.com/anthonytrivisano"
+    ],
+    additionalInfo = {}
+} = Astro.props;
+
+// Use a Record type to satisfy TypeScript
+type SchemaObject = Record<string, any>;
+
+// Create person schema
+const personSchema: SchemaObject = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": name,
+    "jobTitle": jobTitle,
+    "description": description,
+    "url": url,
+    "image": new URL(imageUrl, Astro.site).href,
+    "sameAs": socialProfiles,
+    "knowsAbout": skills.map(skill => skill.name)
+};
+
+// Add work experience if provided
+if (workExperience.length > 0) {
+    personSchema.hasOccupation = workExperience.map(job => ({
+        "@type": "Occupation",
+        "name": job.position,
+        "occupationLocation": {
+            "@type": "Organization",
+            "name": job.name
+        },
+        "startDate": job.startDate,
+        ...(job.endDate && { "endDate": job.endDate }),
+        "description": job.description
+    }));
+}
+
+// Add skills grouped by category if provided
+if (skills.length > 0) {
+    // Group skills by category
+    const skillsByCategory: Record<string, string[]> = {};
+
+    skills.forEach(skill => {
+        const category = skill.category || "General";
+        if (!skillsByCategory[category]) {
+            skillsByCategory[category] = [];
+        }
+        skillsByCategory[category].push(skill.name);
+    });
+
+    // Add each category as a competency area
+    personSchema.hasCredential = Object.entries(skillsByCategory).map(([category, skillNames]) => ({
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": category,
+        "competencyRequired": skillNames
+    }));
+}
+
+// Add additional info if provided
+Object.entries(additionalInfo).forEach(([key, value]) => {
+    personSchema[key] = value;
+});
+
+// Create about page schema
+const aboutPageSchema: SchemaObject = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "name": `About ${name}`,
+    "description": description,
+    "url": new URL('/about', Astro.site).href,
+    "mainEntity": {
+        "@id": "#person"
+    },
+    "about": {
+        "@id": "#person"
+    }
+};
+
+// Add ID reference to person schema
+personSchema["@id"] = "#person";
+
+// Create breadcrumb schema
+const breadcrumbSchema: SchemaObject = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": new URL('/', Astro.site).href
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "About",
+            "item": new URL('/about', Astro.site).href
+        }
+    ]
+};
+
+// Create full schema with graph of all objects
+const fullSchema = {
+    "@context": "https://schema.org",
+    "@graph": [personSchema, aboutPageSchema, breadcrumbSchema]
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(fullSchema)} />

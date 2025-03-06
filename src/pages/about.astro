@@ -6,10 +6,85 @@ import Footer from '../components/Footer.astro';
 import AboutHero from '../components/about/AboutHero.astro';
 import ExperienceTimeline from '../components/about/ExperienceTimeline.astro';
 import SkillsGrid from '../components/about/SkillsGrid.astro';
+import AboutPersonSchema from '../components/Schema/AboutPersonSchema.astro';
+import { generateBreadcrumbs } from '../utils/siteMetadata';
 
+// Define page metadata
+const title = "About Anthony Trivisano - Technology Leadership Expert";
+const description = "Learn about Anthony Trivisano's background, expertise, and experience in technology leadership, database optimization, and digital transformation consulting.";
+const keywords = "Anthony Trivisano, technology leadership, database optimization, digital transformation consultant, tech executive, software development, project management experience";
+
+// Sample experience data - replace with your actual data or import from a data file
+const experienceData = [
+    {
+        name: "Tech Leadership Consulting",
+        position: "Principal Consultant",
+        startDate: "2018-01",
+        description: "Providing technology leadership, database optimization, and digital transformation consulting services to clients across various industries."
+    },
+    {
+        name: "Enterprise Solutions Inc.",
+        position: "VP of Development & Project Management",
+        startDate: "2013-01",
+        endDate: "2017-12",
+        description: "Led cross-functional teams in developing enterprise software solutions, optimizing database performance, and implementing digital transformation initiatives."
+    },
+    {
+        name: "TechSystems Group",
+        position: "Senior Software Architect",
+        startDate: "2008-01",
+        endDate: "2012-12",
+        description: "Designed and implemented scalable software architectures and database systems for enterprise clients."
+    }
+];
+
+// Sample skills data - replace with your actual skills or import from a data file
+const skillsData = [
+    { name: "Technology Leadership", category: "Leadership" },
+    { name: "Team Management", category: "Leadership" },
+    { name: "Project Management", category: "Leadership" },
+    { name: "Digital Transformation", category: "Strategy" },
+    { name: "Business Process Optimization", category: "Strategy" },
+    { name: "Database Optimization", category: "Technical" },
+    { name: "SQL", category: "Technical" },
+    { name: "Web Application Architecture", category: "Technical" },
+    { name: "API Development", category: "Technical" },
+    { name: "Data Security", category: "Security" }
+];
+
+// Social profiles - replace with your actual profiles
+const socialProfiles = [
+    "https://linkedin.com/in/anthonytrivisano",
+    "https://github.com/anthonytrivisano",
+    "https://twitter.com/anthonytrivisano"
+];
+
+// Generate breadcrumbs
+const breadcrumbs = generateBreadcrumbs([
+    { name: "Home", path: "" },
+    { name: "About", path: "about" }
+]);
 ---
 
-<MainLayout title="Learn More About Anthony Trivisano">
+<MainLayout
+    title={title}
+    description={description}
+    keywords={keywords}
+    breadcrumbs={breadcrumbs}>
+
+    <!-- Add Schema.org markup for the about page -->
+    <AboutPersonSchema
+        slot="schema"
+        name="Anthony Trivisano"
+        jobTitle="Technology Leadership & Web Consultant"
+        description={description}
+        imageUrl="/home-hero.png"
+    workExperience={experienceData}
+    skills={skillsData}
+    socialProfiles={socialProfiles}
+}}
+    />
+
     <div class="bg-neutral-950">
         <Header slot="header" />
 
