@@ -4,9 +4,48 @@ import MainLayout from '../layouts/MainLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ContactForm from "../components/contact/ContactForm.astro";
+import ContactPageSchema from '../components/schemas/ContactPage.astro';
+import {generateBreadcrumbs} from '../utils/siteMetadata';
+
+// Define page metadata
+const title = "Contact Anthony Trivisano - Technology Leadership & Web Consultant";
+const description = "Get in touch with Anthony Trivisano for technology leadership consulting, database optimization services, and digital transformation expertise.";
+const keywords = "contact Anthony Trivisano, technology leadership consulting, database optimization services, digital transformation expertise, hire technology consultant";
+
+// Generate breadcrumbs
+const breadcrumbs = generateBreadcrumbs([
+    {name: "Home", path: ""},
+    {name: "Contact", path: "contact"}
+]);
+
+// Social profiles - replace with your actual profiles
+const socialProfiles = [
+    "https://linkedin.com/in/anthonytrivisano",
+];
 ---
 
-<MainLayout title="Contact - Anthony Trivisano">
+<MainLayout
+    title={title}
+    description={description}
+    keywords={keywords}
+    breadcrumbs={breadcrumbs}>
+
+    <!-- Add Schema.org markup for the contact page -->
+    <ContactPageSchema
+        slot="schema"
+        name="Anthony Trivisano"
+        description={description}
+        email="anthony.trivisano@gmail.com"
+        location={{
+            name: "London, Ontario, Canada",
+            addressLocality: "London",
+            addressRegion: "Ontario",
+            addressCountry: "Canada"
+        }}
+        availabilityNote="I'm always open to new opportunities and collaborations. Feel free to reach out!"
+        sameAs={socialProfiles}
+    />
+
     <Header slot="header"/>
 
     <main class="container-custom section">
@@ -25,12 +64,26 @@ import ContactForm from "../components/contact/ContactForm.astro";
                             London, Ontario, Canada
                         </dd>
                     </div>
+
+                    <div>
+                        <dt class="text-lg font-semibold">Connect</dt>
+                        <dd class="mt-2 flex space-x-4">
+                            <a href="https://linkedin.com/in/anthonytrivisano" target="_blank" rel="noopener noreferrer"
+                               class="text-white">
+                                <span class="sr-only">LinkedIn</span>
+                                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path
+                                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                </svg>
+                            </a>
+                        </dd>
+                    </div>
                 </dl>
             </div>
 
             <!-- Contact Form -->
             <div class="p-6 transition-all duration-200 border rounded-3xl bg-neutral-900 border-neutral-800">
-                <ContactForm />
+                <ContactForm/>
             </div>
         </div>
     </main>
