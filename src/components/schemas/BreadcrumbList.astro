@@ -1,0 +1,28 @@
+---
+interface BreadcrumbItem {
+    name: string;
+    item: string;
+}
+
+interface Props {
+    items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+// Use a Record type to satisfy TypeScript
+type SchemaObject = Record<string, any>;
+
+const breadcrumbSchema: SchemaObject = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "name": item.name,
+        "item": item.item
+    }))
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />

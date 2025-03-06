@@ -1,0 +1,51 @@
+---
+interface Props {
+    name?: string;
+    url?: string;
+    image?: string;
+    jobTitle?: string;
+    description?: string;
+    sameAs?: string[];
+    skills?: string[];
+    mainEntityOfPage?: string;
+}
+
+const {
+    name = "Anthony Trivisano",
+    url = "https://anthonytrivisano.com",
+    image = "https://anthonytrivisano.com/images/anthony-trivisano.jpg", // Update with your actual image
+    jobTitle = "Technology Leadership & Database Optimization Consultant",
+    description = "Expert in technology leadership, database optimization, and digital transformation with 15+ years of experience.",
+    sameAs = [
+        "https://linkedin.com/in/anthonytrivisano",
+        "https://github.com/anthonytrivisano",
+        "https://twitter.com/anthonytrivisano"
+    ],
+    skills = [
+        "Technology Leadership",
+        "Database Optimization",
+        "Digital Transformation",
+        "Web Development",
+        "Software Architecture"
+    ],
+    mainEntityOfPage
+} = Astro.props;
+
+// Use a Record type to satisfy TypeScript
+type SchemaObject = Record<string, any>;
+
+const personSchema: SchemaObject = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": name,
+    "url": url,
+    "image": image,
+    "jobTitle": jobTitle,
+    "description": description,
+    "sameAs": sameAs,
+    "knowsAbout": skills,
+    ...(mainEntityOfPage && {"mainEntityOfPage": mainEntityOfPage})
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(personSchema)}/>

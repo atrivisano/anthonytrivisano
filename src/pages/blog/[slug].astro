@@ -10,6 +10,8 @@ import RelatedPosts from '../../components/post/RelatedPosts.astro';
 import CtaSection from '../../components/post/CtaSection.astro';
 import MainLayout from "../../layouts/MainLayout.astro";
 import Footer from "../../components/Footer.astro";
+import BlogPostSchema from '../../components/schemas/BlogPost.astro';
+import { getBlogPostBreadcrumbs } from '../../utils/siteMetadata';
 
 export async function getStaticPaths() {
     const postEntries = await getCollection('blog');
@@ -31,12 +33,28 @@ const relatedPosts = allPosts
     )
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
     .slice(0, 3);
+
+// Get the canonical URL
+const pageURL = post.data.canonical || new URL(Astro.url.pathname, Astro.site).href;
+
+// Get breadcrumbs for the blog post
+const primaryCategory = post.data.categories.length > 0 ? post.data.categories[0] : null;
+const breadcrumbs = getBlogPostBreadcrumbs(post.data.slug, post.data.title, primaryCategory);
 ---
 
 <MainLayout
     title={post.data.title}
     description={post.data.description}
-    keywords={post.data.tags.join(', ')}>
+    keywords={post.data.tags.join(', ')}
+    image={post.data.image.src}
+    breadcrumbs={breadcrumbs}>
+
+    <!-- Add Schema.org markup in the schema slot -->
+    <BlogPostSchema
+        slot="schema"
+        post={post}
+        url={pageURL}
+    />
 
     <div class="bg-neutral-950">
         <Header slot="header"/>

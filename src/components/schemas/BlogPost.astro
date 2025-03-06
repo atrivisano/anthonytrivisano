@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+    post: CollectionEntry<'blog'>;
+    url: string;
+}
+
+const { post, url } = Astro.props;
+const { title, description, date, updatedDate, author, image, categories, tags } = post.data;
+
+// Format dates properly for Schema.org
+const publishDate = new Date(date).toISOString();
+const modifiedDate = updatedDate ? new Date(updatedDate).toISOString() : publishDate;
+
+// Get the full image URL
+const imageUrl = new URL(image.src, Astro.site).href;
+
+// Use a Record type to satisfy TypeScript
+type SchemaObject = Record<string, any>;
+
+// Create the schema structure
+const blogPostSchema: SchemaObject = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "name": title,
+    "description": description,
+    "url": url,
+    "image": imageUrl,
+    "datePublished": publishDate,
+    "dateModified": modifiedDate,
+    "author": {
+        "@type": "Person",
+        "name": author
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "Anthony Trivisano",
+        "url": "https://anthonytrivisano.com"
+    },
+    "keywords": tags.join(", "),
+    "articleSection": categories.join(", "),
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": url
+    }
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(blogPostSchema)} />

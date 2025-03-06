@@ -7,16 +7,130 @@ import FeaturedProjects from '../components/home/FeaturedProjects.astro';
 import FeaturedBlogPosts from '../components/home/FeaturedBlogPosts.astro';
 import SkillsExpertise from '../components/home/SkillsExpertise.astro';
 import CTASection from '../components/home/CTASection.astro';
+import HomepageSchema from '../components/schemas/HomePage.astro';
+import { getCollection } from 'astro:content';
 
-const title = "Anthony Trivisano - Technology leadership, database optimization, and digital transformation consultant";
-const description = "Technology leadership, database optimization, and digital transformation expert with experience in software development and team management.";
-const keywords = "technology leadership, database optimization, digital transformation, software development, project management";
+// SEO metadata
+const title = "Technology Leadership & Web Consultant | Anthony Trivisano";
+const description = "Expert consultant in technology leadership, database optimization, and digital transformation with 15+ years of experience. Helping businesses improve performance, streamline operations, and drive growth through strategic technology implementation.";
+const keywords = "technology leadership, database optimization, digital transformation, software development, project management, team leadership, data security, enterprise applications, business process optimization, technical strategy, performance tuning, web application architecture";
+
+// Get canonical URL for the homepage
+const pageURL = new URL(Astro.url.pathname, Astro.site).href;
+
+// Fetch featured projects from the portfolio collection
+// This assumes you store your projects in a "portfolio" collection
+const getFeaturedProjects = async () => {
+    try {
+        const portfolioEntries = await getCollection('portfolio', ({ data }) => {
+            return !data.draft; // Filter out drafts
+        });
+
+        return portfolioEntries
+            .sort(() => Math.random() - 0.5) // Simple way to randomize for featured items
+            .slice(0, 3) // Get top 3
+            .map(project => ({
+                name: project.data.title,
+                url: `/portfolio/${project.slug}`,
+                description: project.data.description
+            }));
+    } catch (e) {
+        // Fallback data if collection can't be accessed
+        return [
+            {
+                name: "Database Design and Optimization",
+                url: "/portfolio/database-design-and-optimization",
+                description: "Comprehensive database architecture and query optimization for enterprise applications."
+            },
+            {
+                name: "Digital Transformation Strategy",
+                url: "/portfolio/digital-transformation-strategy",
+                description: "Strategic digital transformation roadmap for a mid-sized financial services firm."
+            },
+            {
+                name: "Cross-Functional Team Leadership",
+                url: "/portfolio/cross-functional-team-leadership",
+                description: "Leadership of cross-functional teams to deliver complex technology solutions."
+            }
+        ];
+    }
+};
+
+// Fetch featured blog posts
+// This assumes you store your blog posts in a "blog" collection
+const getFeaturedPosts = async () => {
+    try {
+        const blogEntries = await getCollection('blog');
+
+        return blogEntries
+            .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()) // Sort by date, newest first
+            .slice(0, 3) // Get top 3
+            .map(post => ({
+                name: post.data.title,
+                url: `/blog/${post.data.slug}`,
+                description: post.data.description
+            }));
+    } catch (e) {
+        // Fallback data if collection can't be accessed
+        return [
+            {
+                name: "Building High-Performance Development Teams",
+                url: "/blog/building-high-performance-development-teams",
+                description: "Strategies for creating and leading effective development teams."
+            },
+            {
+                name: "A Comprehensive Approach to Data Security",
+                url: "/blog/data-security-comprehensive-approach",
+                description: "Essential strategies for implementing robust data security in your organization."
+            }
+        ];
+    }
+};
+
+// Key skills/expertise areas
+const skills = [
+    {
+        name: "Technology Leadership",
+        description: "Strategic technology leadership to align technical decisions with business goals"
+    },
+    {
+        name: "Database Optimization",
+        description: "Performance tuning and architecture design for scalable database systems"
+    },
+    {
+        name: "Digital Transformation",
+        description: "End-to-end digital transformation strategies and implementation"
+    },
+    {
+        name: "Web Development",
+        description: "Modern web application architecture and development"
+    },
+    {
+        name: "Team Management",
+        description: "Building and leading high-performance development teams"
+    }
+];
+
+// Fetch the data
+const featuredProjects = await getFeaturedProjects();
+const featuredPosts = await getFeaturedPosts();
 ---
 
 <MainLayout
     title={title}
     description={description}
     keywords={keywords}>
+
+    <!-- Add Schema.org markup -->
+    <HomepageSchema
+        slot="schema"
+        url={pageURL}
+        title={title}
+        description={description}
+        featuredProjects={featuredProjects}
+        featuredPosts={featuredPosts}
+        skills={skills}
+    />
 
     <div class="bg-neutral-950">
         <Header slot="header"/>

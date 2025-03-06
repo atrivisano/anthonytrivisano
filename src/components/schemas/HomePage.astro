@@ -1,0 +1,184 @@
+---
+interface FeaturedItem {
+    name: string;
+    url: string;
+    description?: string;
+    }
+
+interface Skill {
+    name: string;
+    description?: string;
+    }
+
+interface Props {
+    url: string;
+    title: string;
+    description: string;
+    featuredProjects?: FeaturedItem[];
+    featuredPosts?: FeaturedItem[];
+    skills?: Skill[];
+    personName?: string;
+    personImage?: string;
+    personJobTitle?: string;
+    socialProfiles?: string[];
+    }
+
+const {
+    url,
+    title,
+    description,
+    featuredProjects = [],
+    featuredPosts = [],
+    skills = [
+        { name: "Technology Leadership", description: "Strategic technology leadership to align technical decisions with business goals" },
+        { name: "Database Optimization", description: "Performance tuning and architecture design for scalable database systems" },
+        { name: "Digital Transformation", description: "End-to-end digital transformation strategies and implementation" },
+        { name: "Web Development", description: "Modern web application architecture and development" },
+        { name: "Software Engineering", description: "Software development and engineering best practices" }
+        ],
+    personName = "Anthony Trivisano",
+    personImage = "https://anthonytrivisano.com/images/anthony-trivisano.jpg", // Update with your actual image
+  personJobTitle = "Technology Leadership & Database Optimization Consultant",
+    socialProfiles = [
+        "https://linkedin.com/in/anthonytrivisano",
+        "https://github.com/anthonytrivisano",
+        "https://twitter.com/anthonytrivisano"
+        ]
+    } = Astro.props;
+
+// Extract domain for structured data
+const domain = new URL(url).hostname;
+
+// Create a type for Schema.org objects to satisfy TypeScript
+type SchemaObject = Record<string, any>;
+
+    // Create composite schema with multiple entities using @graph
+    const schemaGraph: SchemaObject[] = [
+    // Person information
+    {
+        "@type": "Person",
+        "@id": `${url}#person`,
+        "name": personName,
+        "url": url,
+        "image": personImage,
+        "jobTitle": personJobTitle,
+        "sameAs": socialProfiles,
+        "knowsAbout": skills.map(skill => skill.name)
+    },
+
+    // Website information
+    {
+        "@type": "WebSite",
+        "@id": `${url}#website`,
+        "url": url,
+        "name": title.split(" | ")[1] || title, // Extract site name or use full title
+    "description": description,
+        "publisher": {
+        "@type": "Person",
+        "@id": `${url}#person`
+    },
+        "inLanguage": "en-US"
+    },
+
+    // Professional Service
+    {
+        "@type": "ProfessionalService",
+        "@id": `${url}#service`,
+        "name": `${personName} Consulting`,
+        "description": description,
+        "url": url,
+        "provider": {
+        "@type": "Person",
+        "@id": `${url}#person`
+    },
+        "serviceType": skills.map(skill => skill.name),
+        "areaServed": "Worldwide"
+    },
+
+    // Web Page
+    {
+        "@type": "WebPage",
+        "@id": url,
+        "url": url,
+        "name": title,
+        "description": description,
+        "isPartOf": {
+        "@type": "WebSite",
+        "@id": `${url}#website`
+    },
+        "about": {
+        "@type": "Person",
+        "@id": `${url}#person`
+    },
+        "provider": {
+        "@type": "Person",
+        "@id": `${url}#person`
+    },
+        "potentialAction": {
+        "@type": "ReadAction",
+        "target": [url]
+    }
+    }
+    ];
+
+    // Add skills as offers
+    if (skills.length > 0) {
+        const skillsSchema: SchemaObject = {
+            "@type": "ItemList",
+            "@id": `${url}#skills`,
+            "name": "Professional Services",
+            "description": "Services offered by Anthony Trivisano",
+            "itemListElement": skills.map((skill, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "name": skill.name,
+                "description": skill.description || "",
+                "url": `${url}#${skill.name.toLowerCase().replace(/\s+/g, '-')}`
+            }))
+        };
+        schemaGraph.push(skillsSchema);
+    }
+
+    // Add featured projects if available
+    if (featuredProjects.length > 0) {
+        const projectsSchema: SchemaObject = {
+            "@type": "ItemList",
+            "@id": `${url}#projects`,
+            "name": "Featured Projects",
+            "description": "Highlighted portfolio projects by Anthony Trivisano",
+            "itemListElement": featuredProjects.map((project, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "url": project.url.startsWith('http') ? project.url : `${url.replace(/\/$/, '')}${project.url}`,
+                "name": project.name,
+                ...(project.description && { "description": project.description })
+            }))
+        };
+        schemaGraph.push(projectsSchema);
+    }
+
+    // Add featured blog posts if available
+    if (featuredPosts.length > 0) {
+        const postsSchema: SchemaObject = {
+            "@type": "ItemList",
+            "@id": `${url}#posts`,
+            "name": "Featured Blog Posts",
+            "description": "Recent articles by Anthony Trivisano",
+            "itemListElement": featuredPosts.map((post, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "url": post.url.startsWith('http') ? post.url : `${url.replace(/\/$/, '')}${post.url}`,
+                "name": post.name,
+                ...(post.description && { "description": post.description })
+            }))
+        };
+        schemaGraph.push(postsSchema);
+    }
+
+    const fullSchema: SchemaObject = {
+        "@context": "https://schema.org",
+        "@graph": schemaGraph
+    };
+    ---
+
+    <script type="application/ld+json" set:html={JSON.stringify(fullSchema)} />

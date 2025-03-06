@@ -1,0 +1,43 @@
+---
+import { siteMetadata } from '../../utils/siteMetadata';
+
+interface Props {
+    name?: string;
+    description?: string;
+    url?: string;
+    author?: string;
+    enableSearchAction?: boolean;
+}
+
+const {
+    name = siteMetadata.title,
+    description = siteMetadata.description,
+    url = siteMetadata.siteUrl,
+    author = siteMetadata.person.name,
+    enableSearchAction = true
+} = Astro.props;
+
+const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": name,
+    "description": description,
+    "url": url,
+    "author": {
+        "@type": "Person",
+        "name": author
+    },
+    ...(enableSearchAction ? {
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": `${url}/search?q={search_term_string}`
+            },
+            "query-input": "required name=search_term_string"
+        }
+    } : {})
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />

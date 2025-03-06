@@ -13,6 +13,11 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 
 const {title, description, image = '/meta-image.jpg', keywords} = Astro.props;
+
+// Format the title with or without the site name
+const formattedTitle = title.includes('Anthony Trivisano')
+    ? title
+    : `${title} | Anthony Trivisano`;
 ---
 
 <!-- Basic Metadata -->
@@ -21,11 +26,9 @@ const {title, description, image = '/meta-image.jpg', keywords} = Astro.props;
 <meta name="robots" content="index,follow">
 
 <!-- Primary Meta Tags -->
-<title>{`${title} | Anthony Trivisano`}</title>
-<meta name="title"
-      content={`${title} | Anthony Trivisano`}/>
-<meta name="description"
-      content={description}/>
+<title>{formattedTitle}</title>
+<meta name="title" content={formattedTitle}/>
+<meta name="description" content={description}/>
 <meta name="author" content="Anthony Trivisano"/>
 <meta name="keywords" content={keywords}/>
 
@@ -35,14 +38,14 @@ const {title, description, image = '/meta-image.jpg', keywords} = Astro.props;
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website"/>
 <meta property="og:url" content={canonicalURL}/>
-<meta property="og:title" content={title}/>
+<meta property="og:title" content={formattedTitle}/>
 <meta property="og:description" content={description}/>
 <meta property="og:image" content={new URL(image, Astro.url)}/>
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image"/>
 <meta property="twitter:url" content={canonicalURL}/>
-<meta property="twitter:title" content={title}/>
+<meta property="twitter:title" content={formattedTitle}/>
 <meta property="twitter:description" content={description}/>
 <meta property="twitter:image" content={new URL(image, Astro.url)}/>
 

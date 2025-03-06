@@ -1,28 +1,47 @@
 ---
 import '../styles/global.css';
 import BaseHead from "../components/BaseHead.astro";
+import Person from "../components/schemas/Person.astro";
+import BreadcrumbList from "../components/schemas/BreadcrumbList.astro";
+
 interface Props {
     title: string;
     description?: string;
     keywords: string;
     image?: string;
+    breadcrumbs?: Array<{ name: string; item: string }>;
 }
 
 const {
     title,
     description = "Anthony Trivisano - Technology leadership, database optimization, and digital transformation consultant.",
     keywords,
-    image
+    image,
+    breadcrumbs
 } = Astro.props;
+
+// Get the canonical URL
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <BaseHead title={title}
-              description={description}
-              keywords={keywords}
-              image={image}/>
+    <BaseHead
+        title={title}
+        description={description}
+        keywords={keywords}
+        image={image}
+    />
+
+    <!-- Base Schema.org markup for person -->
+    <Person />
+
+    <!-- Breadcrumbs Schema if provided -->
+    {breadcrumbs && <BreadcrumbList items={breadcrumbs} />}
+
+    <!-- Slot for page-specific Schema components -->
+    <slot name="schema" />
 </head>
 <body>
 <div class="bg-neutral-950 flex min-h-screen flex-col justify-between">

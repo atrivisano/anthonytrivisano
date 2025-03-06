@@ -1,0 +1,122 @@
+---
+import { siteMetadata } from '../../utils/siteMetadata';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+    project: CollectionEntry<'portfolio'>;
+    url: string;
+}
+
+const { project, url } = Astro.props;
+const {
+    title,
+    description,
+    client,
+    timeline,
+    role,
+    technologies,
+    category,
+    summary,
+    featuredImage,
+    challengeIntroduction,
+    challenges,
+    solutionIntroduction,
+    solution,
+    metrics
+} = project.data;
+
+// Get the full image URL if it exists
+const imageUrl = featuredImage ? new URL(featuredImage, Astro.site).href : null;
+
+// Create the schema for timeline - extract year values for dateCreated
+let startYear, endYear;
+try {
+    // Extract years from timeline string, assuming format like "Jan 2022 - Mar 2023"
+    const yearMatches = timeline.match(/\b(20\d{2})\b/g);
+    if (yearMatches && yearMatches.length > 0) {
+        startYear = yearMatches[0];
+        endYear = yearMatches.length > 1 ? yearMatches[1] : startYear;
+    }
+} catch (e) {
+    // If parsing fails, don't set the years
+}
+
+// Create the schema structure
+const portfolioSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": title,
+    "headline": title,
+    "description": description,
+    "abstract": summary,
+    "url": url,
+    ...(imageUrl && { "image": imageUrl }),
+    "creator": {
+        "@type": "Person",
+        "name": siteMetadata.person.name
+    },
+    "author": {
+        "@type": "Person",
+        "name": siteMetadata.person.name,
+        "url": siteMetadata.siteUrl
+    },
+    ...(startYear && { "dateCreated": `${startYear}` }),
+    ...(endYear && { "datePublished": `${endYear}` }),
+    "keywords": technologies.join(", "),
+    "genre": category,
+    "accountablePerson": {
+        "@type": "Person",
+        "name": siteMetadata.person.name
+    },
+    "contributor": {
+        "@type": "Person",
+        "name": siteMetadata.person.name,
+        "jobTitle": role
+    },
+    ...(client && {
+        "sourceOrganization": {
+            "@type": "Organization",
+            "name": client
+        }
+    }),
+    ...(metrics && metrics.length > 0 && {
+        "result": metrics.map(metric => ({
+            "@type": "Thing",
+            "name": metric.label,
+            "value": metric.value
+        }))
+    }),
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": url
+    }
+};
+
+// Create a second "Project" type for additional SEO value
+const projectSchema = {
+    "@context": "https://schema.org",
+    "@type": "Project",
+    "name": title,
+    "description": description,
+    "url": url,
+    ...(imageUrl && { "image": imageUrl }),
+    "founder": {
+        "@type": "Person",
+        "name": siteMetadata.person.name
+    },
+    "member": {
+        "@type": "Person",
+        "name": siteMetadata.person.name,
+        "jobTitle": role
+    },
+    "keywords": technologies.join(", ")
+};
+
+// Combine both schemas into a graph
+const combinedSchema = {
+    "@context": "https://schema.org",
+    "@graph": [portfolioSchema, projectSchema]
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(combinedSchema)} />
