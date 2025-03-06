@@ -1,8 +1,17 @@
 ---
-
 ---
 
-<form id="contact-form" class="space-y-6" method="POST" action="/api/contact" netlify>
+<form id="contact-form" class="space-y-6" method="POST" data-netlify="true" name="contact" netlify-honeypot="bot-field">
+    <!-- Honeypot field to prevent spam -->
+    <p class="hidden">
+        <label>
+            Don't fill this out if you're human: <input name="bot-field" />
+        </label>
+    </p>
+
+    <!-- Required hidden input for Netlify forms -->
+    <input type="hidden" name="form-name" value="contact" />
+
     <div>
         <label for="name" class="block text-sm font-medium text-white">
             Name
@@ -70,49 +79,19 @@
 </form>
 
 <script>
-    const form = document.getElementById('contact-form') as HTMLFormElement;
-    const statusDiv = document.getElementById('form-status') as HTMLDivElement;
+    // Check for success/error in URL parameters (for when the user is redirected back)
+    document.addEventListener('DOMContentLoaded', () => {
+        const statusDiv = document.getElementById('form-status') as HTMLDivElement;
+        const urlParams = new URLSearchParams(window.location.search);
 
-    if (form && statusDiv) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Show loading state
-            statusDiv.classList.remove('hidden');
-            statusDiv.classList.remove('text-green-500', 'text-red-500');
-            statusDiv.classList.add('text-black', 'dark:text-white');
-            statusDiv.innerHTML = 'Sending message...';
-
-            const formData = new FormData(form);
-            const formObject = Object.fromEntries(formData.entries());
-
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formObject),
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // Success state
-                    statusDiv.classList.remove('text-black', 'dark:text-white', 'text-red-500');
-                    statusDiv.classList.add('text-green-500');
-                    statusDiv.innerHTML = 'Message sent successfully!';
-                    form.reset();
-                } else {
-                    // Error state
-                    throw new Error(data.message || 'Something went wrong');
-                }
-            } catch (error) {
-                // Error state
-                statusDiv.classList.remove('text-black', 'dark:text-white', 'text-green-500');
-                statusDiv.classList.add('text-red-500');
-                statusDiv.innerHTML = error instanceof Error ? error.message : 'Failed to send message. Please try again.';
-            }
-        });
-    }
+        if (urlParams.has('success')) {
+            statusDiv.classList.remove('hidden', 'text-red-500');
+            statusDiv.classList.add('text-green-500');
+            statusDiv.innerHTML = 'Message sent successfully!';
+        } else if (urlParams.has('error')) {
+            statusDiv.classList.remove('hidden', 'text-green-500');
+            statusDiv.classList.add('text-red-500');
+            statusDiv.innerHTML = 'There was a problem submitting your form. Please try again.';
+        }
+    });
 </script>

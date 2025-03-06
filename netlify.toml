@@ -2,10 +2,13 @@
 command = "npm run build"
 publish = "dist"
 
-[functions]
-directory = "netlify/functions"
-
 [[redirects]]
-from = "/api/*"
-to = "/.netlify/functions/entry/:splat"
-status = 200
+from = "/success"
+to = "/contact?success=true"
+status = 302
+
+# Form handling error redirect
+[[redirects]]
+from = "/error"
+to = "/success?error=true"
+status = 302
