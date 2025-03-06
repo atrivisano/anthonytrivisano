@@ -12,7 +12,7 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 
-const {title, description, image = '/home-hero.png', keywords} = Astro.props;
+const {title, description, image = '/meta-image.jpg', keywords} = Astro.props;
 ---
 
 <!-- Basic Metadata -->
@@ -26,7 +26,7 @@ const {title, description, image = '/home-hero.png', keywords} = Astro.props;
       content={`${title} | Anthony Trivisano`}/>
 <meta name="description"
       content={description}/>
-<meta name="author" content="Your Name"/>
+<meta name="author" content="Anthony Trivisano"/>
 <meta name="keywords" content={keywords}/>
 
 <!-- Canonical URL -->
