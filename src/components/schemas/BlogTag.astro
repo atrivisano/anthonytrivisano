@@ -5,23 +5,18 @@ interface Props {
     title: string;
     description: string;
     url: string;
-    category: string;
+    tag: string;
     posts: CollectionEntry<'blog'>[];
+    relatedTags?: Array<{tag: string; count: number}>;
 }
 
-const { title, description, url, category, posts } = Astro.props;
+const { title, description, url, tag, posts, relatedTags = [] } = Astro.props;
 
 // Use a Record type to satisfy TypeScript
 type SchemaObject = Record<string, any>;
 
-// Clean up category name for display (replace hyphens with spaces and capitalize first letter of each word)
-const displayCategory = category
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-
-// Create category page schema
-const categorySchema: SchemaObject = {
+// Create tag page schema
+const tagSchema: SchemaObject = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": title,
@@ -64,12 +59,13 @@ const categorySchema: SchemaObject = {
     },
     "about": {
         "@type": "Thing",
-        "name": displayCategory,
-        "description": `Articles about ${displayCategory.toLowerCase()} by Anthony Trivisano`
-    }
+        "name": `#${tag}`,
+        "description": `Articles tagged with #${tag} by Anthony Trivisano`
+    },
+    "keywords": [tag, ...relatedTags.slice(0, 5).map(t => t.tag)]
 };
 
-// Create breadcrumb list for the category
+// Create breadcrumb list for the tag
 const breadcrumbSchema: SchemaObject = {
     "@type": "BreadcrumbList",
     "itemListElement": [
@@ -88,7 +84,7 @@ const breadcrumbSchema: SchemaObject = {
         {
             "@type": "ListItem",
             "position": 3,
-            "name": displayCategory,
+            "name": `#${tag}`,
             "item": url
         }
     ]
@@ -97,7 +93,7 @@ const breadcrumbSchema: SchemaObject = {
 // Create full schema
 const fullSchema: SchemaObject = {
     "@context": "https://schema.org",
-    "@graph": [categorySchema, breadcrumbSchema]
+    "@graph": [tagSchema, breadcrumbSchema]
 };
 ---
 

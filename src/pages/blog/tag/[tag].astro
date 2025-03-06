@@ -8,6 +8,8 @@ import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import BlogPostCard from '../../../components/blog/PostCard.astro';
 import TagCloud from '../../../components/blog/TagCloud.astro';
+import BlogTagSchema from '../../../components/schemas/BlogTag.astro';
+import { generateBreadcrumbs } from '../../../utils/siteMetadata';
 
 export async function getStaticPaths() {
     const posts = await getCollection('blog');
@@ -64,11 +66,41 @@ const tagCounts = allTags && Array.isArray(allTags)
     })
     : [];
 
+// Sort tags by count for SEO relevance
+const sortedTags = [...tagCounts].sort((a, b) => b.count - a.count);
+
 const pageTitle = `#${tag} - Anthony Trivisano Blog`;
 const pageDescription = `Articles tagged with #${tag} by Anthony Trivisano, VP of Development & Project Management.`;
+const keywords = `${tag}, blog, articles, Anthony Trivisano, ${sortedTags.slice(0, 5).map(t => t.tag).join(', ')}`;
+
+// Get canonical URL for this page
+const pageURL = new URL(Astro.url.pathname, Astro.site).href;
+
+// Generate breadcrumbs for this page
+const breadcrumbs = generateBreadcrumbs([
+    { name: "Home", path: "" },
+    { name: "Blog", path: "blog" },
+    { name: `#${tag}`, path: `blog/tag/${tag.toLowerCase().replace(/\s+/g, '-')}` }
+]);
 ---
 
-<MainLayout title={pageTitle} description={pageDescription}>
+<MainLayout
+    title={pageTitle}
+    description={pageDescription}
+    keywords={keywords}
+    breadcrumbs={breadcrumbs}>
+
+    <!-- Add Schema.org markup for the tag page -->
+    <BlogTagSchema
+        slot="schema"
+        title={pageTitle}
+        description={pageDescription}
+        url={pageURL}
+        tag={tag}
+        posts={sortedPosts}
+        relatedTags={sortedTags}
+    />
+
     <div class="bg-neutral-950">
         <Header slot="header" />
 

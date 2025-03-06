@@ -8,6 +8,8 @@ import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import BlogPostCard from '../../../components/blog/PostCard.astro';
 import CategoryNav from '../../../components/blog/CategoryNav.astro';
+import BlogCategorySchema from '../../../components/schemas/BlogCategory.astro';
+import { generateBreadcrumbs } from '../../../utils/siteMetadata';
 
 export async function getStaticPaths() {
     const posts = await getCollection('blog');
@@ -51,11 +53,40 @@ const sortedPosts = [...postsArray].sort((a, b) => {
     return 0;
 });
 
+// Format the category slug for URLs
+const categorySlug = category.toLowerCase().replace(/\s+/g, '-');
+
 const pageTitle = `${category} Articles - Anthony Trivisano`;
 const pageDescription = `Explore articles about ${category.toLowerCase()} from Anthony Trivisano, VP of Development & Project Management.`;
+const keywords = `${category}, ${category.toLowerCase()} articles, technology leadership, ${category.toLowerCase()} insights, Anthony Trivisano`;
+
+// Get canonical URL for this page
+const pageURL = new URL(Astro.url.pathname, Astro.site).href;
+
+// Generate breadcrumbs for this page
+const breadcrumbs = generateBreadcrumbs([
+    { name: "Home", path: "" },
+    { name: "Blog", path: "blog" },
+    { name: category, path: `blog/category/${categorySlug}` }
+]);
 ---
 
-<MainLayout title={pageTitle} description={pageDescription}>
+<MainLayout
+    title={pageTitle}
+    description={pageDescription}
+    keywords={keywords}
+    breadcrumbs={breadcrumbs}>
+
+    <!-- Add Schema.org markup for the category page -->
+    <BlogCategorySchema
+        slot="schema"
+        title={pageTitle}
+        description={pageDescription}
+        url={pageURL}
+        category={category}
+        posts={sortedPosts}
+    />
+
     <div class="bg-neutral-950">
         <Header slot="header" />
 
