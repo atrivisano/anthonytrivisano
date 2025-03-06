@@ -1,0 +1,112 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface ProjectSummary {
+    title: string;
+    description: string;
+    slug: string;
+    category?: string;
+    image?: string;
+}
+
+interface Props {
+    title: string;
+    description: string;
+    url: string;
+    projects: ProjectSummary[];
+    personName?: string;
+}
+
+const {
+    title,
+    description,
+    url,
+    projects = [],
+    personName = "Anthony Trivisano"
+} = Astro.props;
+
+// Use a Record type to satisfy TypeScript
+type SchemaObject = Record<string, any>;
+
+// Create portfolio collection schema
+const portfolioCollectionSchema: SchemaObject = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": url,
+    "name": title,
+    "description": description,
+    "url": url,
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": personName,
+        "url": new URL('/', Astro.site).href
+    },
+    "about": {
+        "@type": "Person",
+        "name": personName,
+        "url": new URL('/', Astro.site).href
+    }
+};
+
+// Add mainEntity only if projects exist
+if (projects.length > 0) {
+    portfolioCollectionSchema.mainEntity = {
+        "@type": "ItemList",
+        "numberOfItems": projects.length,
+        "itemListElement": projects.map((project, index) => {
+            // Get project image URL if it exists
+            const imageUrl = project.image
+                ? new URL(project.image, Astro.site).href
+                : null;
+
+            // Get project URL
+            const projectUrl = new URL(`/portfolio/${project.slug}`, Astro.site).href;
+
+            return {
+                "@type": "ListItem",
+                "position": index + 1,
+                "item": {
+                    "@type": "CreativeWork",
+                    "name": project.title,
+                    "description": project.description,
+                    "url": projectUrl,
+                    ...(imageUrl && { "image": imageUrl }),
+                    ...(project.category && { "genre": project.category }),
+                    "creator": {
+                        "@type": "Person",
+                        "name": personName
+                    }
+                }
+            };
+        })
+    };
+}
+
+// Create breadcrumb schema
+const breadcrumbSchema: SchemaObject = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": new URL('/', Astro.site).href
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Portfolio",
+            "item": url
+        }
+    ]
+};
+
+// Create full schema
+const fullSchema = {
+    "@context": "https://schema.org",
+    "@graph": [portfolioCollectionSchema, breadcrumbSchema]
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(fullSchema)} />

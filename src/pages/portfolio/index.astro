@@ -1,12 +1,83 @@
 ---
+import { getCollection } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PortfolioHero from '../../components/portfolio/PortfolioHero.astro';
 import ProjectGrid from '../../components/portfolio/ProjectGrid.astro';
+import PortfolioCollectionSchema from '../../components/schemas/PortfolioCollection.astro';
+import { generateBreadcrumbs } from '../../utils/siteMetadata';
+
+// Define page metadata
+const title = "Portfolio - Technology Leadership & Web Consultant | Anthony Trivisano";
+const description = "Explore Anthony Trivisano's portfolio of technology leadership, database optimization, and digital transformation projects. View case studies across various industries.";
+const keywords = "technology portfolio, database optimization projects, digital transformation case studies, web application architecture, Anthony Trivisano portfolio, technology consulting projects";
+
+// Get all portfolio projects
+const getAllProjects = async () => {
+    try {
+        const portfolioEntries = await getCollection('portfolio', ({ data }) => {
+            return !data.draft; // Filter out drafts
+        });
+
+        return portfolioEntries.map(project => ({
+            title: project.data.title,
+            description: project.data.description,
+            slug: project.slug,
+            category: project.data.category || "Development",
+            image: project.data.featuredImage || null
+        }));
+    } catch (e) {
+        // Fallback data if collection can't be accessed
+        return [
+            {
+                title: "Database Design and Optimization",
+                description: "Comprehensive database architecture and query optimization for enterprise applications.",
+                slug: "database-design-and-optimization",
+                category: "Database"
+            },
+            {
+                title: "Digital Transformation Strategy",
+                description: "Strategic digital transformation roadmap for a mid-sized financial services firm.",
+                slug: "digital-transformation-strategy",
+                category: "Strategy"
+            },
+            {
+                title: "Cross-Functional Team Leadership",
+                description: "Leadership of cross-functional teams to deliver complex technology solutions.",
+                slug: "cross-functional-team-leadership",
+                category: "Leadership"
+            }
+        ];
+    }
+};
+
+// Get projects and generate breadcrumbs
+const projects = await getAllProjects();
+const breadcrumbs = generateBreadcrumbs([
+    { name: "Home", path: "" },
+    { name: "Portfolio", path: "portfolio" }
+]);
+
+// Get canonical URL for this page
+const pageURL = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
-<MainLayout title="Portfolio - Anthony Trivisano">
+<MainLayout
+    title={title}
+    description={description}
+    keywords={keywords}
+    breadcrumbs={breadcrumbs}>
+
+    <!-- Add Schema.org markup for the portfolio collection -->
+    <PortfolioCollectionSchema
+        slot="schema"
+        title={title}
+        description={description}
+        url={pageURL}
+        projects={projects}
+    />
+
     <div class="bg-neutral-950">
         <Header slot="header" />
 

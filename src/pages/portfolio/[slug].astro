@@ -5,6 +5,8 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
+import PortfolioItemSchema from '../../components/schemas/Portfolio.astro';
+import { getPortfolioBreadcrumbs } from '../../utils/siteMetadata';
 
 import CaseStudyHero from '../../components/portfolio/CaseStudyHero.astro';
 import CaseStudyOverview from '../../components/portfolio/CaseStudyOverview.astro';
@@ -38,15 +40,40 @@ const {
     challenges,
     solution,
     process,
-    technical
+    technical,
+    featuredImage
 } = entry.data;
+
+// Get canonical URL for this page
+const pageURL = new URL(Astro.url.pathname, Astro.site).href;
+
+// Generate breadcrumbs for this portfolio item
+const breadcrumbs = getPortfolioBreadcrumbs(entry.slug, title);
+
+// Enhance the title and description for SEO
+const pageTitle = `${title} | Case Study | Anthony Trivisano`;
+
+// Use summary for meta description if description is not provided or is too short
+const metaDescription = description.length > 50 ? description : summary;
+
+// Default image for social sharing if featuredImage is not provided
+const image = featuredImage || null;
 ---
 
 <MainLayout
-    title={`${title} | Case Study | Anthony Trivisano`}
-    description={description}
+    title={pageTitle}
+    description={metaDescription}
     keywords={keywords}
+    image={image}
+    breadcrumbs={breadcrumbs}
 >
+    <!-- Add Schema.org markup for the portfolio item -->
+    <PortfolioItemSchema
+        slot="schema"
+        project={entry}
+        url={pageURL}
+    />
+
     <div class="bg-neutral-950">
         <Header slot="header" />
 

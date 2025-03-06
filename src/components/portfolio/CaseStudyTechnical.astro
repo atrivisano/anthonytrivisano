@@ -12,23 +12,21 @@ interface Props {
 
 const { highlights = [] } = Astro.props;
 ---
-<section class="py-16 sm:py-24">
+<section class="py-16 sm:py-24 bg-neutral-950">
     <Container>
-        <div class="mx-auto max-w-3xl">
-            <h2 class="text-3xl font-bold tracking-tight text-white mb-8">Technical Highlights</h2>
+        <h2 class="text-3xl font-bold tracking-tight text-white mb-8">Technical Highlights</h2>
 
-            <div class="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-8">
-                {highlights && highlights.length > 0 ? (
-                    highlights.map(highlight => (
-                        <div>
-                            <h3 class="text-xl font-bold text-white">{highlight.title}</h3>
-                            <p class="mt-4 text-neutral-400">{highlight.description}</p>
-                        </div>
-                    ))
-                ) : (
-                    <slot />
-                )}
-            </div>
+        <div class="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-8">
+            {highlights && highlights.length > 0 ? (
+                highlights.map(highlight => (
+                    <div>
+                        <h3 class="text-xl font-bold text-white">{highlight.title}</h3>
+                        <p class="mt-4 text-neutral-400">{highlight.description}</p>
+                    </div>
+                ))
+            ) : (
+                <slot />
+            )}
         </div>
     </Container>
 </section>
