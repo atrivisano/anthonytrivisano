@@ -7,20 +7,28 @@ import FeaturedProjects from '../components/home/FeaturedProjects.astro';
 import FeaturedBlogPosts from '../components/home/FeaturedBlogPosts.astro';
 import SkillsExpertise from '../components/home/SkillsExpertise.astro';
 import CTASection from '../components/home/CTASection.astro';
+
+const title = "Anthony Trivisano - VP of Development & Project Management";
+const description = "Technology leadership, database optimization, and digital transformation expert with experience in software development and team management.";
+const keywords = "technology leadership, database optimization, digital transformation, software development, project management";
 ---
 
-<MainLayout title="Anthony Trivisano - VP of Development & Project Management">
+<MainLayout
+    title={title}
+    description={description}
+    keywords={keywords}>
+
     <div class="bg-neutral-950">
-        <Header slot="header" />
+        <Header slot="header"/>
 
         <main class="flex flex-col gap-20">
-            <HeroSection />
-            <FeaturedProjects />
-            <FeaturedBlogPosts />
-            <SkillsExpertise />
-            <CTASection />
+            <HeroSection/>
+            <FeaturedProjects/>
+            <FeaturedBlogPosts/>
+            <SkillsExpertise/>
+            <CTASection/>
         </main>
 
-        <Footer slot="footer" />
+        <Footer slot="footer"/>
     </div>
 </MainLayout>

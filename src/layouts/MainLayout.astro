@@ -4,16 +4,25 @@ import BaseHead from "../components/BaseHead.astro";
 interface Props {
     title: string;
     description?: string;
-    keywords?: string;
+    keywords: string;
+    image?: string;
 }
 
-const {title, description = "Anthony Trivisano - VP of Development & Project Management", keywords} = Astro.props;
+const {
+    title,
+    description = "Anthony Trivisano - Technology leadership, database optimization, and digital transformation consultant.",
+    keywords,
+    image
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead title={title}
+              description={description}
+              keywords={keywords}
+              image={image}/>
 </head>
 <body>
 <div class="bg-neutral-950 flex min-h-screen flex-col justify-between">

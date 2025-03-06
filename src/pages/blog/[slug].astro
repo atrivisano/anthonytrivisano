@@ -33,8 +33,11 @@ const relatedPosts = allPosts
     .slice(0, 3);
 ---
 
-<MainLayout title={post.data.title}
-            description={post.data.description}>
+<MainLayout
+    title={post.data.title}
+    description={post.data.description}
+    keywords={post.data.tags.join(', ')}>
+
     <div class="bg-neutral-950">
         <Header slot="header"/>
 
