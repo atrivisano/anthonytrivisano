@@ -1,5 +1,7 @@
 ---
 // src/components/Header.astro
+
+import Navigation from "./Navigation.astro";
 const navigation = [
 	{ name: 'Home', href: '/' },
 	{ name: 'About', href: '/about' },
@@ -25,23 +27,7 @@ const pathname = Astro.url.pathname;
 			</a>
 
 			<!-- Desktop Navigation -->
-			<nav class="hidden md:flex space-x-8">
-				{
-					navigation.map((item) => (
-						<a
-							href={item.href}
-							class:list={[
-								"text-base font-medium transition-colors",
-								pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
-									? "text-white"
-									: "text-gray-200 hover:text-white"
-							]}
-						>
-							{item.name}
-						</a>
-					))
-				}
-			</nav>
+			<Navigation />
 
 			<!-- Mobile menu button -->
 			<div class="md:hidden">
