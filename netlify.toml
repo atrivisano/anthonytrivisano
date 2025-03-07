@@ -1,14 +1,16 @@
 [build]
 command = "npm run build"
 publish = "dist"
+functions = "netlify/functions"
 
 [[redirects]]
-from = "/success"
-to = "/contact?success=true"
-status = 302
+from = "/*"
+to = "/.netlify/functions/entry-server"
+status = 200
 
-# Form handling error redirect
-[[redirects]]
-from = "/error"
-to = "/success?error=true"
-status = 302
+[functions]
+directory = "netlify/functions"
+
+[build.environment]
+# Enable Netlify Forms
+NETLIFY_USE_FORMS = "true"
