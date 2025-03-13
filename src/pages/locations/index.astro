@@ -1,0 +1,185 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CTASection from '../../components/home/CTASection.astro';
+import { getCollection } from 'astro:content';
+
+// SEO metadata
+const title = "Technology Consulting Locations | Anthony Trivisano";
+const description = "Expert technology consulting services across Canada. Find technology leadership, database optimization, and digital transformation services in your city.";
+const keywords = "technology consulting locations, Canadian technology consulting, Toronto technology services, Vancouver consulting, Montreal technology consulting, Calgary technology leadership, Ottawa consulting services";
+
+// Get canonical URL
+const pageURL = new URL(Astro.url.pathname, Astro.site).href;
+
+// Fetch all locations
+const getAllLocations = async () => {
+    try {
+        const locationEntries = await getCollection('locations', ({ data }) => {
+            return !data.draft; // Filter out drafts
+        });
+
+        return locationEntries.map(location => ({
+            name: location.data.cityName,
+            title: location.data.title,
+            description: location.data.description,
+            image: location.data.image,
+            url: `/locations/${location.slug}`,
+            services: location.data.servicesOffered
+        }));
+    } catch (e) {
+        console.error("Error fetching locations:", e);
+        // Fallback data if collection can't be accessed
+        return [
+            {
+                name: "Toronto",
+                title: "Technology Leadership & Consulting in Toronto",
+                description: "Expert technology leadership, database optimization, and digital transformation services in Toronto, Ontario.",
+                image: "/images/locations/toronto.jpg",
+                url: "/locations/toronto",
+                services: ["Technology Leadership", "Database Optimization", "Digital Transformation"]
+            },
+            {
+                name: "Vancouver",
+                title: "Technology Consulting & Leadership in Vancouver",
+                description: "Strategic technology consulting, database optimization, and digital transformation services in Vancouver, BC.",
+                image: "/images/locations/vancouver.jpg",
+                url: "/locations/vancouver",
+                services: ["Technology Leadership", "Database Optimization", "Cloud Migration"]
+            },
+            {
+                name: "Montreal",
+                title: "Technology Leadership & Consulting in Montreal",
+                description: "Expert technology consulting, database optimization, and digital transformation services in Montreal, Quebec.",
+                image: "/images/locations/montreal.jpg",
+                url: "/locations/montreal",
+                services: ["Technology Leadership", "AI Strategy", "Digital Transformation"]
+            },
+            {
+                name: "Calgary",
+                title: "Technology Leadership & Consulting in Calgary",
+                description: "Strategic technology consulting for energy, agriculture, and emerging technology companies in Calgary, Alberta.",
+                image: "/images/locations/calgary.jpg",
+                url: "/locations/calgary",
+                services: ["Technology Leadership", "Energy Sector Technology", "Business Intelligence"]
+            },
+            {
+                name: "Ottawa",
+                title: "Technology Leadership & Consulting in Ottawa",
+                description: "Specialized technology solutions for government, technology, and healthcare organizations in Ottawa, Ontario.",
+                image: "/images/locations/ottawa.jpg",
+                url: "/locations/ottawa",
+                services: ["Government Technology Consulting", "Cybersecurity Strategy", "Digital Transformation"]
+            }
+        ];
+    }
+};
+
+const locations = await getAllLocations();
+---
+
+<MainLayout
+    title={title}
+    description={description}
+    keywords={keywords}>
+
+    <div class="bg-neutral-950">
+        <Header slot="header"/>
+
+        <main class="flex flex-col gap-16">
+            <!-- Hero Section -->
+            <section class="container mx-auto px-4 pt-16 md:pt-24 pb-12">
+                <div class="flex flex-col items-center text-center max-w-4xl mx-auto">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                        Technology Consulting Across Canada
+                    </h1>
+                    <p class="text-xl text-neutral-300 mb-10">
+                        Expert technology leadership, database optimization, and digital transformation services available in major Canadian cities. Find location-specific consulting services tailored to your region's unique business environment.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Locations Grid -->
+            <section class="container mx-auto px-4 py-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {locations.map(location => (
+                        <div class="bg-neutral-900 rounded-lg overflow-hidden transition-transform duration-300 hover:transform hover:scale-[1.02] shadow-lg">
+                            <div class="relative h-48 overflow-hidden">
+                                {location.image ? (
+                                    <img
+                                        src={location.image}
+                                        alt={location.name}
+                                        class="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <div class="w-full h-full bg-neutral-800 flex items-center justify-center">
+                                        <span class="text-2xl text-neutral-400">{location.name}</span>
+                                    </div>
+                                )}
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                                    <h3 class="text-xl font-bold text-white">{location.name}</h3>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <p class="text-neutral-300 mb-4 line-clamp-3">
+                                    {location.description}
+                                </p>
+                                <div class="mb-4">
+                                    <h4 class="text-sm uppercase tracking-wider text-neutral-400 mb-2">Services Offered:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        {location.services.slice(0, 3).map(service => (
+                                            <span class="bg-neutral-800 text-neutral-300 text-xs px-2 py-1 rounded">
+                                                {service}
+                                            </span>
+                                        ))}
+                                        {location.services.length > 3 && (
+                                            <span class="bg-neutral-800 text-neutral-300 text-xs px-2 py-1 rounded">
+                                                +{location.services.length - 3} more
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                                <a
+                                    href={location.url}
+                                    class="inline-block bg-neutral-600 hover:bg-neutral-700 text-white font-medium py-2 px-4 rounded transition-colors"
+                                >
+                                    View Location
+                                </a>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            <!-- National Services Section -->
+            <section class="container mx-auto px-4 py-12">
+                <div class="flex flex-col items-center text-center max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold text-white mb-6">National Technology Consulting</h2>
+                    <p class="text-xl text-neutral-300 mb-10">
+                        While our physical locations provide local expertise, our services are available nationwide. Our consulting team understands the unique challenges and opportunities across different Canadian regions.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+                        <div class="bg-neutral-900 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold text-white mb-3">Remote Consulting</h3>
+                            <p class="text-neutral-300">Comprehensive technology consulting services available remotely throughout Canada.</p>
+                        </div>
+                        <div class="bg-neutral-900 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold text-white mb-3">On-Site Visits</h3>
+                            <p class="text-neutral-300">Scheduled on-site consulting available in locations outside our neutral service areas.</p>
+                        </div>
+                        <div class="bg-neutral-900 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold text-white mb-3">Virtual Workshops</h3>
+                            <p class="text-neutral-300">Interactive virtual sessions and workshops for distributed teams across multiple locations.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <CTASection />
+        </main>
+
+        <Footer slot="footer"/>
+    </div>
+</MainLayout>

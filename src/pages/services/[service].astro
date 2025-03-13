@@ -1,0 +1,189 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CTASection from '../../components/home/CTASection.astro';
+import ServiceSchema from '../../components/schemas/ServicePage.astro';
+import { getCollection } from 'astro:content';
+
+// Get the slug from the URL
+export async function getStaticPaths() {
+    try {
+        const servicesEntries = await getCollection('services');
+
+        return servicesEntries.map(service => ({
+            params: { service: service.slug },
+            props: { service }
+        }));
+    } catch (e) {
+        // Fallback data if collection can't be accessed
+        const fallbackServices = [
+            {
+                slug: 'technology-leadership',
+                data: {
+                    title: 'Technology Leadership',
+                    description: 'Strategic technology leadership to align technical decisions with business goals.',
+                    content: 'Full content would be here in the actual collection entry.',
+                    image: '/images/services/technology-leadership.jpg',
+                    keywords: 'technology leadership, CTO services, tech strategy'
+                }
+            },
+            {
+                slug: 'database-optimization',
+                data: {
+                    title: 'Database Optimization',
+                    description: 'Performance tuning and architecture design for scalable database systems.',
+                    content: 'Full content would be here in the actual collection entry.',
+                    image: '/images/services/database-optimization.jpg',
+                    keywords: 'database optimization, performance tuning, query optimization'
+                }
+            },
+            {
+                slug: 'digital-transformation',
+                data: {
+                    title: 'Digital Transformation',
+                    description: 'End-to-end digital transformation strategies and implementation.',
+                    content: 'Full content would be here in the actual collection entry.',
+                    image: '/images/services/digital-transformation.jpg',
+                    keywords: 'digital transformation, legacy system modernization, cloud migration'
+                }
+            }
+        ];
+
+        return fallbackServices.map(service => ({
+            params: { service: service.slug },
+            props: { service }
+        }));
+    }
+}
+
+// Get the service data
+const { service } = Astro.props;
+
+// SEO metadata
+const title = `${service.data.title} | Anthony Trivisano`;
+const description = service.data.description;
+const keywords = service.data.keywords || '';
+
+// Get canonical URL
+const pageURL = new URL(Astro.url.pathname, Astro.site).href;
+
+// Get related services
+const getRelatedServices = async () => {
+    try {
+        const allServices = await getCollection('services');
+
+        return allServices
+            .filter(item => item.slug !== service.slug) // Exclude current service
+            .sort(() => Math.random() - 0.5) // Simple randomization
+            .slice(0, 3) // Get top 3
+            .map(item => ({
+                name: item.data.title,
+                url: `/services/${item.slug}`,
+                description: item.data.description
+            }));
+    } catch (e) {
+        // Fallback related services
+        return [
+            {
+                name: "Database Optimization",
+                url: "/services/database-optimization",
+                description: "Performance tuning and architecture design for scalable database systems."
+            },
+            {
+                name: "Digital Transformation",
+                url: "/services/digital-transformation",
+                description: "End-to-end digital transformation strategies and implementation."
+            },
+            {
+                name: "Web Development",
+                url: "/services/web-development",
+                description: "Modern web application architecture and development."
+            }
+        ].filter(item => `/services/${service.slug}` !== item.url);
+    }
+};
+
+const relatedServices = await getRelatedServices();
+---
+
+<MainLayout
+    title={title}
+    description={description}
+    keywords={keywords}>
+
+    <!-- Add Schema.org markup -->
+    <ServiceSchema
+        slot="schema"
+        url={pageURL}
+        title={title}
+        description={description}
+        serviceName={service.data.title}
+        serviceImage={service.data.image}
+    />
+
+    <div class="bg-neutral-950">
+        <Header slot="header"/>
+
+        <main class="flex flex-col gap-16 px-5">
+            <!-- Hero Section -->
+            <section class="container mx-auto px-4 pt-16 md:pt-24">
+                <div class="flex flex-col items-center text-center">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                        {service.data.title}
+                    </h1>
+                    <p class="text-xl text-neutral-300 max-w-3xl mb-10">
+                        {service.data.description}
+                    </p>
+                    <div class="w-full max-w-4xl">
+                        {service.data.image && (
+                            <img
+                                src={service.data.image}
+                                alt={service.data.title}
+                                class="w-full h-auto rounded-lg shadow-lg"
+                            />
+                        )}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Service Content -->
+            <section class="container mx-auto px-4 py-8">
+                <div class="prose prose-lg prose-invert max-w-3xl mx-auto">
+                    <!-- This would be the rendered content from the service collection -->
+                    <Fragment set:html={service.data.content || '<p>Detailed service information coming soon.</p>'} />
+                </div>
+            </section>
+
+            <!-- Related Services -->
+            <section class="container mx-auto px-4 py-12 bg-neutral-900 rounded-lg">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Related Services</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {relatedServices.map(item => (
+                        <div class="bg-neutral-800 rounded-lg p-6 transition-all duration-300 hover:bg-neutral-700">
+                            <h3 class="text-xl font-semibold text-white mb-3">
+                                <a href={item.url} class="hover:text-neutral-500 transition-colors">
+                                    {item.name}
+                                </a>
+                            </h3>
+                            <p class="text-neutral-300 mb-4">{item.description}</p>
+                            <a href={item.url} class="text-neutral-500 hover:text-neutral-400 font-medium inline-flex items-center">
+                                Learn more
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <CTASection />
+        </main>
+
+        <Footer slot="footer"/>
+    </div>
+</MainLayout>

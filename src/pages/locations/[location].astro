@@ -1,0 +1,262 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CTASection from '../../components/home/CTASection.astro';
+import LocationSchema from '../../components/schemas/LocationPage.astro';
+import { getCollection } from 'astro:content';
+
+// Get the slug from the URL
+export async function getStaticPaths() {
+    try {
+        const locationEntries = await getCollection('locations');
+
+        return locationEntries.map(location => ({
+            params: { location: location.slug },
+            props: { location }
+        }));
+    } catch (e) {
+        // Fallback data if collection can't be accessed
+        const fallbackLocations = [
+            {
+                slug: 'sydney',
+                data: {
+                    title: 'Technology Consulting in Sydney',
+                    cityName: 'Sydney',
+                    description: 'Expert technology leadership and consulting services in Sydney, Australia. Helping local businesses optimize their technology infrastructure and drive digital transformation.',
+                    content: 'Full content would be here in the actual collection entry.',
+                    image: '/images/locations/sydney.jpg',
+                    keywords: 'technology consulting Sydney, database optimization Sydney, digital transformation Sydney',
+                    address: '123 George Street, Sydney NSW 2000',
+                    mapUrl: 'https://maps.google.com/?q=Sydney+NSW',
+                    servicesOffered: [
+                        'Technology Leadership',
+                        'Database Optimization',
+                        'Digital Transformation'
+                    ]
+                }
+            },
+            {
+                slug: 'melbourne',
+                data: {
+                    title: 'Technology Consulting in Melbourne',
+                    cityName: 'Melbourne',
+                    description: 'Professional technology consulting services in Melbourne. Specializing in database optimization, digital transformation, and technology leadership.',
+                    content: 'Full content would be here in the actual collection entry.',
+                    image: '/images/locations/melbourne.jpg',
+                    keywords: 'technology consulting Melbourne, database optimization Melbourne, digital transformation Melbourne',
+                    address: '456 Collins Street, Melbourne VIC 3000',
+                    mapUrl: 'https://maps.google.com/?q=Melbourne+VIC',
+                    servicesOffered: [
+                        'Technology Leadership',
+                        'Database Optimization',
+                        'Web Development'
+                    ]
+                }
+            },
+            {
+                slug: 'brisbane',
+                data: {
+                    title: 'Technology Consulting in Brisbane',
+                    cityName: 'Brisbane',
+                    description: 'Strategic technology consulting services in Brisbane. Helping Queensland businesses optimize their technology stack and processes.',
+                    content: 'Full content would be here in the actual collection entry.',
+                    image: '/images/locations/brisbane.jpg',
+                    keywords: 'technology consulting Brisbane, database optimization Brisbane, digital transformation Brisbane',
+                    address: '789 Queen Street, Brisbane QLD 4000',
+                    mapUrl: 'https://maps.google.com/?q=Brisbane+QLD',
+                    servicesOffered: [
+                        'Database Optimization',
+                        'Digital Transformation',
+                        'Team Management'
+                    ]
+                }
+            }
+        ];
+
+        return fallbackLocations.map(location => ({
+            params: { location: location.slug },
+            props: { location }
+        }));
+    }
+}
+
+// Get the location data
+const { location } = Astro.props;
+
+// SEO metadata
+const title = location.data.title;
+const description = location.data.description;
+const keywords = location.data.keywords || '';
+
+// Get canonical URL
+const pageURL = new URL(Astro.url.pathname, Astro.site).href;
+
+// Get other locations
+const getOtherLocations = async () => {
+    try {
+        const allLocations = await getCollection('locations');
+
+        return allLocations
+            .filter(item => item.slug !== location.slug) // Exclude current location
+            .slice(0, 3) // Get top 3
+            .map(item => ({
+                name: item.data.cityName,
+                url: `/locations/${item.slug}`,
+                description: item.data.description
+            }));
+    } catch (e) {
+        // Fallback other locations
+        return [
+            {
+                name: "Sydney",
+                url: "/locations/sydney",
+                description: "Expert technology leadership and consulting services in Sydney, Australia."
+            },
+            {
+                name: "Melbourne",
+                url: "/locations/melbourne",
+                description: "Professional technology consulting services in Melbourne."
+            },
+            {
+                name: "Brisbane",
+                url: "/locations/brisbane",
+                description: "Strategic technology consulting services in Brisbane."
+            }
+        ].filter(item => `/locations/${location.slug}` !== item.url);
+    }
+};
+const otherLocations = await getOtherLocations();
+---
+
+<MainLayout
+    title={title}
+    description={description}
+    keywords={keywords}>
+
+    <!-- Add Schema.org markup -->
+    <LocationSchema
+        slot="schema"
+        url={pageURL}
+        title={title}
+        description={description}
+        locationName={location.data.cityName}
+        locationImage={location.data.image}
+        address={location.data.address}
+        mapUrl={location.data.mapUrl}
+    />
+
+    <div class="bg-neutral-950">
+        <Header slot="header"/>
+
+        <main class="flex flex-col gap-16">
+            <!-- Hero Section -->
+            <section class="container mx-auto px-4 pt-16 md:pt-24">
+                <div class="flex flex-col items-center text-center">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                        {location.data.title}
+                    </h1>
+                    <p class="text-xl text-neutral-300 max-w-3xl mb-10">
+                        {location.data.description}
+                    </p>
+                    <div class="w-full max-w-4xl">
+                        {location.data.image && (
+                            <img
+                                src={location.data.image}
+                                alt={location.data.cityName}
+                                class="w-full h-auto rounded-lg shadow-lg"
+                            />
+                        )}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Offered -->
+            <section class="container mx-auto px-4 py-12">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">
+                    Services Offered in {location.data.cityName}
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {location.data.servicesOffered.map(service => {
+                        const serviceSlug = service.toLowerCase().replace(/\s+/g, '-');
+                        return (
+                            <div class="bg-neutral-800 rounded-lg p-6 transition-all duration-300 hover:bg-neutral-700">
+                                <h3 class="text-xl font-semibold text-white mb-3">
+                                    <a href={`/services/${serviceSlug}`} class="hover:text-neutral-500 transition-colors">
+                                        {service}
+                                    </a>
+                                </h3>
+                                <p class="text-neutral-300 mb-4">
+                                    Professional {service.toLowerCase()} services available in {location.data.cityName}.
+                                </p>
+                                <a href={`/services/${serviceSlug}`} class="text-neutral-500 hover:text-neutral-400 font-medium inline-flex items-center">
+                                    Learn more
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                        )
+                    })}
+                </div>
+            </section>
+
+            <!-- Location Content -->
+            <section class="container mx-auto px-4 py-8">
+                <div class="prose prose-lg prose-invert max-w-3xl mx-auto">
+                    <!-- This would be the rendered content from the location collection -->
+                    <Fragment set:html={location.data.content || '<p>Detailed location information coming soon.</p>'} />
+                </div>
+            </section>
+
+            <!-- Location Information -->
+            <section class="container mx-auto px-10 py-10 bg-neutral-900 rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-4">Schedule a Consultation</h2>
+                        <p class="text-neutral-300 mb-6">
+                            Ready to transform your technology infrastructure in {location.data.cityName}?
+                            Let's schedule a consultation to discuss your needs.
+                        </p>
+                        <a
+                            href="/contact"
+                            class="inline-block bg-neutral-600 hover:bg-neutral-700 text-white font-medium py-2 px-4 rounded transition-colors"
+                        >
+                            Book a Consultation
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Other Locations -->
+            <section class="container mx-auto px-10 py-10 bg-neutral-900 rounded-lg">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Other Service Locations</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {otherLocations.map(item => (
+                        <div class="bg-neutral-800 rounded-lg p-6 transition-all duration-300 hover:bg-neutral-700">
+                            <h3 class="text-xl font-semibold text-white mb-3">
+                                <a href={item.url} class="hover:text-neutral-500 transition-colors">
+                                    {item.name}
+                                </a>
+                            </h3>
+                            <p class="text-neutral-300 mb-4">{item.description}</p>
+                            <a href={item.url} class="text-neutral-500 hover:text-neutral-400 font-medium inline-flex items-center">
+                                View location
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <CTASection />
+        </main>
+
+        <Footer slot="footer"/>
+    </div>
+</MainLayout>

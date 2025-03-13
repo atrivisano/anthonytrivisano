@@ -1,0 +1,24 @@
+---
+const {
+    url,
+    title,
+    description,
+    serviceName,
+    serviceImage
+} = Astro.props;
+---
+
+<script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": url,
+    "name": serviceName,
+    "description": description,
+    "provider": {
+        "@type": "Person",
+        "name": "Anthony Trivisano",
+        "url": "https://anthonytrivisano.com"
+    },
+    "image": serviceImage,
+    "url": url
+})}></script>

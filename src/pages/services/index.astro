@@ -1,0 +1,321 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CTASection from '../../components/home/CTASection.astro';
+import ServiceIcon from '../../components/services/ServiceIcon.astro';
+import { getCollection } from 'astro:content';
+
+// SEO metadata
+const title = "Technology Consulting Services | Anthony Trivisano";
+const description = "Comprehensive technology consulting services including technology leadership, database optimization, digital transformation, and more. Expert solutions for businesses across Canada.";
+const keywords = "technology consulting services, technology leadership, database optimization, digital transformation, IT consulting, technology strategy, web development, cloud migration";
+
+// Get canonical URL
+const pageURL = new URL(Astro.url.pathname, Astro.site).href;
+
+// Fetch all services
+const getAllServices = async () => {
+    try {
+        const serviceEntries = await getCollection('services', ({ data }) => {
+            return !data.draft; // Filter out drafts
+        });
+
+        return serviceEntries.map(service => ({
+            title: service.data.title || "",
+            description: service.data.description || "",
+            image: service.data.image || "",
+            icon: service.data.icon || "cog", // Heroicon name
+            url: `/services/${service.slug}`,
+            benefits: service.data.benefits?.slice(0, 3) || []
+        }));
+    } catch (e) {
+        console.error("Error fetching services:", e);
+        // Fallback data if collection can't be accessed
+        return [
+            {
+                title: "Technology Leadership",
+                description: "Strategic technology leadership to align technical decisions with business goals and drive organizational transformation.",
+                image: "/images/services/technology-leadership.jpg",
+                icon: "light-bulb",
+                url: "/services/technology-leadership",
+                benefits: [
+                    "Align technology investments with business objectives",
+                    "Reduce risk in technology decision-making",
+                    "Accelerate digital transformation initiatives"
+                ]
+            },
+            {
+                title: "Database Optimization",
+                description: "Performance tuning and architecture design for scalable, efficient database systems that improve application performance and reliability.",
+                image: "/images/services/database-optimization.jpg",
+                icon: "server",
+                url: "/services/database-optimization",
+                benefits: [
+                    "Faster application response times",
+                    "Improved user experience",
+                    "Reduced infrastructure costs"
+                ]
+            },
+            {
+                title: "Digital Transformation",
+                description: "End-to-end digital transformation strategies and implementation to modernize your business, improve customer experience, and drive operational efficiency.",
+                image: "/images/services/digital-transformation.jpg",
+                icon: "arrow-path",
+                url: "/services/digital-transformation",
+                benefits: [
+                    "Accelerated business growth through new digital capabilities",
+                    "Improved operational efficiency and reduced costs",
+                    "Enhanced customer engagement and satisfaction"
+                ]
+            }
+        ];
+    }
+};
+
+const services = await getAllServices();
+
+// Group services into categories for the grid layout
+const servicesByCategory = [
+    {
+        category: "Strategic Services",
+        items: services.filter(service =>
+            ["Technology Leadership", "Digital Transformation"].includes(service.title)
+        )
+    },
+    {
+        category: "Technical Services",
+        items: services.filter(service =>
+            ["Database Optimization", "Web Development", "Cloud Migration"].includes(service.title)
+        )
+    },
+    {
+        category: "Specialized Services",
+        items: services.filter(service =>
+            ["Team Management", "AI Strategy", "Cybersecurity Strategy", "Business Intelligence"].includes(service.title)
+        )
+    }
+];
+
+// Filter out empty categories
+const filteredServicesByCategory = servicesByCategory.filter(category => category.items.length > 0);
+---
+
+<MainLayout
+    title={title}
+    description={description}
+    keywords={keywords}>
+
+    <div class="bg-neutral-950">
+        <Header slot="header"/>
+
+        <main class="flex flex-col gap-16 px-5">
+            <!-- Hero Section -->
+            <section class="container mx-auto px-4 pt-16 md:pt-24 pb-12">
+                <div class="flex flex-col items-center text-center max-w-4xl mx-auto">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                        Technology Consulting Services
+                    </h1>
+                    <p class="text-xl text-neutral-300 mb-10">
+                        Comprehensive technology consulting solutions to help your organization leverage technology for growth, efficiency, and competitive advantage. Our services span from strategic leadership to technical implementation.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Featured Services -->
+            <section class="container mx-auto px-4 py-12">
+                <h2 class="text-3xl font-bold text-white mb-12 text-center">Our Core Services</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    {services.slice(0, 3).map(service => (
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-20 h-20 bg-neutral-600/20 rounded-full flex items-center justify-center mb-6 text-neutral-500">
+                                <ServiceIcon icon={service.icon} class="w-10 h-10" />
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-4">{service.title}</h3>
+                            <p class="text-neutral-300 mb-6">{service.description}</p>
+                            <a
+                                href={service.url}
+                                class="inline-block bg-neutral-600 hover:bg-neutral-700 text-white font-medium py-2 px-4 rounded transition-colors"
+                            >
+                                Learn More
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            <!-- All Services by Category -->
+            {filteredServicesByCategory.map(category => (
+                <section class="container mx-auto px-10 py-10 bg-neutral-900 rounded-lg">
+                    <h2 class="text-2xl font-bold text-white mb-8">{category.category}</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {category.items.map(service => (
+                            <div class="bg-neutral-800 rounded-lg overflow-hidden flex flex-col md:flex-row">
+                                {service.image && (
+                                    <div class="md:w-1/3 h-48 md:h-auto">
+                                        <img
+                                            src={service.image}
+                                            alt={service.title}
+                                            class="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                )}
+                                <div class="p-6 md:w-2/3">
+                                    <h3 class="text-xl font-semibold text-white mb-3">{service.title}</h3>
+                                    <p class="text-neutral-300 mb-4">{service.description}</p>
+                                    {service.benefits && service.benefits.length > 0 && (
+                                        <ul class="mb-4 text-neutral-300 text-sm">
+                                            {service.benefits.map(benefit => (
+                                                <li class="flex items-start mb-1">
+                                                    <span class="text-neutral-500 mr-2">✓</span>
+                                                    {benefit}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                    <a
+                                        href={service.url}
+                                        class="inline-block text-neutral-500 hover:text-neutral-400 font-medium"
+                                    >
+                                        View Details →
+                                    </a>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            ))}
+
+            <!-- Service Process -->
+            <section class="container mx-auto px-4 py-12">
+                <div class="flex flex-col items-center text-center max-w-4xl mx-auto mb-12">
+                    <h2 class="text-3xl font-bold text-white mb-6">Our Consulting Approach</h2>
+                    <p class="text-xl text-neutral-300">
+                        Regardless of the specific service, we follow a structured approach to ensure we deliver measurable value to your organization.
+                    </p>
+                </div>
+                <div class="relative">
+                    <!-- Process Timeline Line -->
+                    <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-neutral-600/30 hidden md:block"></div>
+
+                    <!-- Process Steps -->
+                    <div class="space-y-12 relative">
+                        <!-- Step 1 -->
+                        <div class="flex flex-col md:flex-row items-center">
+                            <div class="md:w-1/2 md:pr-12 mb-6 md:mb-0 md:text-right">
+                                <h3 class="text-2xl font-bold text-white mb-2">Discovery & Assessment</h3>
+                                <p class="text-neutral-300">Understand your current state, business objectives, challenges, and opportunities through interviews, workshops, and analysis.</p>
+                            </div>
+                            <div class="relative md:w-14 flex justify-center">
+                                <div class="w-10 h-10 bg-neutral-600 rounded-full flex items-center justify-center z-10">
+                                    <span class="text-white font-bold">1</span>
+                                </div>
+                            </div>
+                            <div class="md:w-1/2 md:pl-12 hidden md:block"></div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="flex flex-col md:flex-row items-center">
+                            <div class="md:w-1/2 md:pr-12 hidden md:block"></div>
+                            <div class="relative md:w-14 flex justify-center">
+                                <div class="w-10 h-10 bg-neutral-600 rounded-full flex items-center justify-center z-10">
+                                    <span class="text-white font-bold">2</span>
+                                </div>
+                            </div>
+                            <div class="md:w-1/2 md:pl-12 mb-6 md:mb-0 md:text-left">
+                                <h3 class="text-2xl font-bold text-white mb-2">Strategy Development</h3>
+                                <p class="text-neutral-300">Create a tailored approach that addresses your specific needs, leveraging our expertise and industry best practices.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="flex flex-col md:flex-row items-center">
+                            <div class="md:w-1/2 md:pr-12 mb-6 md:mb-0 md:text-right">
+                                <h3 class="text-2xl font-bold text-white mb-2">Implementation</h3>
+                                <p class="text-neutral-300">Execute the strategy through a structured approach, focusing on delivering incremental value throughout the process.</p>
+                            </div>
+                            <div class="relative md:w-14 flex justify-center">
+                                <div class="w-10 h-10 bg-neutral-600 rounded-full flex items-center justify-center z-10">
+                                    <span class="text-white font-bold">3</span>
+                                </div>
+                            </div>
+                            <div class="md:w-1/2 md:pl-12 hidden md:block"></div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="flex flex-col md:flex-row items-center">
+                            <div class="md:w-1/2 md:pr-12 hidden md:block"></div>
+                            <div class="relative md:w-14 flex justify-center">
+                                <div class="w-10 h-10 bg-neutral-600 rounded-full flex items-center justify-center z-10">
+                                    <span class="text-white font-bold">4</span>
+                                </div>
+                            </div>
+                            <div class="md:w-1/2 md:pl-12 mb-6 md:mb-0 md:text-left">
+                                <h3 class="text-2xl font-bold text-white mb-2">Knowledge Transfer</h3>
+                                <p class="text-neutral-300">Ensure your team has the skills and understanding needed to maintain and build upon the implemented solutions.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="flex flex-col md:flex-row items-center">
+                            <div class="md:w-1/2 md:pr-12 mb-6 md:mb-0 md:text-right">
+                                <h3 class="text-2xl font-bold text-white mb-2">Ongoing Support</h3>
+                                <p class="text-neutral-300">Provide continued guidance and support to ensure long-term success and address evolving needs.</p>
+                            </div>
+                            <div class="relative md:w-14 flex justify-center">
+                                <div class="w-10 h-10 bg-neutral-600 rounded-full flex items-center justify-center z-10">
+                                    <span class="text-white font-bold">5</span>
+                                </div>
+                            </div>
+                            <div class="md:w-1/2 md:pl-12 hidden md:block"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Industry Experience -->
+            <section class="container mx-auto px-4 py-12 bg-neutral-900 rounded-lg">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center">Industry Experience</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <div class="bg-neutral-800 p-6 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-white mb-2">Financial Services</h3>
+                        <p class="text-neutral-300 text-sm">Banking, insurance, and fintech solutions</p>
+                    </div>
+                    <div class="bg-neutral-800 p-6 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-white mb-2">Healthcare</h3>
+                        <p class="text-neutral-300 text-sm">Providers, insurers, and health technology</p>
+                    </div>
+                    <div class="bg-neutral-800 p-6 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-white mb-2">Energy</h3>
+                        <p class="text-neutral-300 text-sm">Oil & gas, utilities, and renewable energy</p>
+                    </div>
+                    <div class="bg-neutral-800 p-6 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-white mb-2">Retail</h3>
+                        <p class="text-neutral-300 text-sm">Omnichannel retail and e-commerce</p>
+                    </div>
+                    <div class="bg-neutral-800 p-6 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-white mb-2">Manufacturing</h3>
+                        <p class="text-neutral-300 text-sm">Industrial and consumer goods manufacturing</p>
+                    </div>
+                    <div class="bg-neutral-800 p-6 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-white mb-2">Technology</h3>
+                        <p class="text-neutral-300 text-sm">Software, hardware, and IT services</p>
+                    </div>
+                    <div class="bg-neutral-800 p-6 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-white mb-2">Government</h3>
+                        <p class="text-neutral-300 text-sm">Federal, provincial, and municipal agencies</p>
+                    </div>
+                    <div class="bg-neutral-800 p-6 rounded-lg text-center">
+                        <h3 class="text-xl font-semibold text-white mb-2">Education</h3>
+                        <p class="text-neutral-300 text-sm">K-12, higher education, and EdTech</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <CTASection />
+        </main>
+
+        <Footer slot="footer"/>
+    </div>
+</MainLayout>

@@ -78,4 +78,91 @@ const portfolio = defineCollection({
     }),
 });
 
-export const collections = {blog, portfolio};
+const services = defineCollection({
+    type: 'content',
+    schema: z.object({
+        title: z.string(),
+        description: z.string(),
+        keywords: z.string(),
+        content: z.string(),
+        image: z.string().optional(),
+        icon: z.string().optional(),
+        features: z.array(
+            z.object({
+                title: z.string(),
+                description: z.string(),
+            })
+        ).optional(),
+        benefits: z.array(z.string()).optional(),
+        process: z.array(
+            z.object({
+                step: z.string(),
+                description: z.string(),
+            })
+        ).optional(),
+        faq: z.array(
+            z.object({
+                question: z.string(),
+                answer: z.string(),
+            })
+        ).optional(),
+        relatedServices: z.array(z.string()).optional(),
+        casestudies: z.array(z.string()).optional(),
+        draft: z.boolean().optional().default(false),
+    }),
+});
+
+const locations = defineCollection({
+    type: 'content',
+    schema: z.object({
+        title: z.string(),
+        cityName: z.string(),
+        description: z.string(),
+        content: z.string(),
+        image: z.string().optional(),
+        keywords: z.string(),
+        address: z.string(),
+        mapUrl: z.string(),
+        email: z.string().optional(),
+        phone: z.string().optional(),
+        servicesOffered: z.array(z.string()),
+        localClients: z.array(
+            z.object({
+                name: z.string(),
+                industry: z.string(),
+                logo: z.string().optional(),
+            })
+        ).optional(),
+        cityFeatures: z.array(
+            z.object({
+                title: z.string(),
+                description: z.string(),
+            })
+        ).optional(),
+        metaData: z.object({
+            regionCode: z.string().optional(),
+            country: z.string().default('Canada'),
+            population: z.number().optional(),
+            established: z.number().optional(),
+        }).optional(),
+        draft: z.boolean().optional().default(false),
+    }),
+});
+
+const testimonials = defineCollection({
+    type: 'content',
+    schema: z.object({
+        name: z.string(),
+        company: z.string(),
+        location: z.string(),
+        quote: z.string(),
+        avatar: z.string().optional(),
+        position: z.string().optional(),
+        projectLink: z.string().optional(),
+        date: z.coerce.date().optional(),
+        featured: z.boolean().optional().default(false),
+        serviceCategory: z.string().optional(),
+    }),
+});
+
+export const collections = {blog, portfolio, services, locations, testimonials};

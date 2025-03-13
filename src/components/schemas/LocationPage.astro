@@ -1,0 +1,33 @@
+---
+const {
+    url,
+    title,
+    description,
+    locationName,
+    locationImage,
+    address,
+    mapUrl
+} = Astro.props;
+---
+
+<script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": url,
+    "name": title,
+    "description": description,
+    "provider": {
+        "@type": "Person",
+        "name": "Anthony Trivisano",
+        "url": "https://anthonytrivisano.com"
+    },
+    "image": locationImage,
+    "url": url,
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": address,
+        "addressLocality": locationName,
+        "addressCountry": "Australia"
+    },
+    "hasMap": mapUrl
+})}></script>
