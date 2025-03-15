@@ -1,7 +1,6 @@
 # Allow all crawlers to access everything
 User-agent: *
-Disallow:
-
+Allow: /
 # Specify the location of the sitemap
 Sitemap: https://anthonytrivisano.com/sitemap-index.xml
 Sitemap: https://anthonytrivisano.com/sitemap-0.xml
