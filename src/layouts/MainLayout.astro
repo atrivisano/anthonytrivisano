@@ -20,8 +20,7 @@ const {
     breadcrumbs
 } = Astro.props;
 
-// Get the canonical URL
-const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 ---
 
 <!DOCTYPE html>
@@ -34,14 +33,32 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
         image={image}
     />
 
+    <!-- Google Analytics Script -->
+    {gaId && (
+        <>
+            <script is:inline>
+                window.dataLayer = window.dataLayer || [];
+
+                function gtag() {
+                    dataLayer.push(arguments);
+                }
+
+                gtag('js', new Date());
+                gtag('config', '{gaId}');
+            </script>
+            <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}/>
+        </>
+    )}
+
     <!-- Base Schema.org markup for person -->
-    <Person />
+    <Person/>
 
     <!-- Breadcrumbs Schema if provided -->
-    {breadcrumbs && <BreadcrumbList items={breadcrumbs} />}
+    {breadcrumbs &&
+        <BreadcrumbList items={breadcrumbs}/>}
 
     <!-- Slot for page-specific Schema components -->
-    <slot name="schema" />
+    <slot name="schema"/>
 </head>
 <body>
 <div class="bg-neutral-950 flex min-h-screen flex-col justify-between">
